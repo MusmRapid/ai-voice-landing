@@ -74,7 +74,7 @@ const Header: React.FC = () => {
           scrollToSection("hero");
           setMenuOpen(false);
         }}
-        className={`text-2xl font-bold cursor-pointer select-none text-yellowBrand ${theme === 'dark' ? 'text-yellowBrand' : 'text-heroLeft'}`}
+        className={`text-2xl font-bold cursor-pointer select-none ${theme === 'dark' ? 'text-yellowBrand' : 'text-heroLeft'}`}
       >
         AI Voice
       </div>
