@@ -9,7 +9,7 @@ const footerItems = [
   { name: "Regions", to: "regions" },
   { name: "Advantages", to: "advantages" },
   { name: "Testimonials", to: "testimonials" },
-  { name: "Final CTA", to: "final-cta" },
+  { name: "Contact", to: "contact" },
 ];
 
 const scrollToSection = (id: string) => {

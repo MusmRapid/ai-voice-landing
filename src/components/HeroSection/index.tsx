@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Particles from './Particles';
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai/react';
 import { themeAtom } from '../../atom/themeAtom';
+import LeadCaptureModal from "../Modal/LeadCaptureModal";
 
 const HeroSection: React.FC = () => {
   const [theme] = useAtom(themeAtom);
+    const [openModal, setOpenModal] = useState(false);
 
   return (
     <div className="relative w-full h-screen">
@@ -57,6 +59,7 @@ const HeroSection: React.FC = () => {
           className="flex flex-col items-center justify-center gap-4 mt-10 sm:flex-row"
         >
           <button
+            onClick={() => setOpenModal(true)}
             className={`
               px-8 py-4 font-bold rounded-lg transition
               ${theme === 'dark' ? 'bg-yellowBrand text-black hover:bg-yellow-400' : 'bg-yellowBrand text-black hover:bg-yellow-400'}
@@ -66,6 +69,7 @@ const HeroSection: React.FC = () => {
           </button>
 
           <button
+            onClick={() => setOpenModal(true)}
             className={`
               px-8 py-4 rounded-lg border transition
               ${theme === 'dark'
@@ -77,6 +81,7 @@ const HeroSection: React.FC = () => {
           </button>
         </motion.div>
       </div>
+      <LeadCaptureModal open={openModal} onClose={() => setOpenModal(false)} />
     </div>
   );
 };
