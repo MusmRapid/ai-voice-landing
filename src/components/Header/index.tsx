@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link as ScrollLink } from "react-scroll";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { name: "Home", to: "hero" },
+  { name: "Why Choose Us", to: "whychooseus" },
   { name: "Features", to: "features" },
-  { name: "How It Works", to: "howitworks" },
-  { name: "Demo", to: "demo" },
-  { name: "Pricing", to: "pricing" },
-  { name: "Contact", to: "footer" },
+  { name: "Regions", to: "regions" },
+  { name: "Advantages", to: "advantages" },
+  { name: "Testimonials", to: "testimonials" },
+  { name: "Final CTA", to: "final-cta" },
 ];
 
-interface HeaderProps {
-  onMenuClick?: () => void;
-}
+const scrollToSection = (id: string) => {
+  const el = document.getElementById(id);
+  if (el) {
+    window.scrollTo({
+      top: el.offsetTop - 80, 
+      behavior: "smooth",
+    });
+  }
+};
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("hero");
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -26,37 +32,59 @@ const Header: React.FC<HeaderProps> = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + 100; 
+      let currentSection = "hero";
+
+      navItems.forEach((item) => {
+        const el = document.getElementById(item.to);
+        if (el && el.offsetTop <= scrollPos) {
+          currentSection = item.to;
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); 
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <motion.header
-    className={`fixed top-5 z-50 mx-auto inset-x-0 transition-all duration-500
+      className={`fixed top-5 z-50 mx-auto inset-x-0 transition-all duration-500
         ${isScrolled ? "backdrop-blur-md bg-black/30 shadow-md" : "bg-black/20"} 
-        rounded-2xl w-[95%] max-w-6xl`}
-    initial={{ y: -20 }}
-    animate={{ y: 0 }}
+        rounded-2xl w-[95%] max-w-7xl`}
+      initial={{ y: -20 }}
+      animate={{ y: 0 }}
     >
       <div className="flex items-center justify-between h-16 px-6">
-        {/* Left: Logo */}
-        <div className="text-2xl font-bold cursor-pointer select-none text-yellowBrand">
-          AIVoice
+        <div
+          onClick={() => {
+            scrollToSection("hero");
+            setMenuOpen(false);
+          }}
+          className="text-2xl font-bold cursor-pointer select-none text-yellowBrand"
+        >
+          AI Voice
         </div>
 
-        {/* Right: Desktop Nav */}
         <nav className="hidden space-x-8 text-white md:flex font-inter">
           {navItems.map((item) => (
-            <ScrollLink
+            <button
               key={item.to}
-              to={item.to}
-              smooth={true}
-              duration={500}
-              offset={-80}
-              className="transition-colors cursor-pointer hover:text-yellowBrand"
+              onClick={() => scrollToSection(item.to)}
+              className={`transition-colors cursor-pointer ${
+                activeSection === item.to ? "text-yellowBrand" : "hover:text-yellowBrand"
+              }`}
             >
               {item.name}
-            </ScrollLink>
+            </button>
           ))}
         </nav>
 
-        {/* Right: Mobile Menu */}
         <div className="flex items-center md:hidden">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -67,21 +95,21 @@ const Header: React.FC<HeaderProps> = () => {
         </div>
       </div>
 
-      {/* Mobile Dropdown */}
       {menuOpen && (
         <div className="flex flex-col px-6 py-4 mt-2 space-y-4 text-white md:hidden bg-black/70 backdrop-blur-md rounded-xl">
           {navItems.map((item) => (
-            <ScrollLink
+            <button
               key={item.to}
-              to={item.to}
-              smooth={true}
-              duration={500}
-              offset={-80}
-              onClick={() => setMenuOpen(false)}
-              className="transition-colors cursor-pointer hover:text-yellowBrand"
+              onClick={() => {
+                scrollToSection(item.to);
+                setMenuOpen(false);
+              }}
+              className={`transition-colors cursor-pointer ${
+                activeSection === item.to ? "text-yellowBrand" : "hover:text-yellowBrand"
+              }`}
             >
               {item.name}
-            </ScrollLink>
+            </button>
           ))}
         </div>
       )}
