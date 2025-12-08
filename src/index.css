@@ -7,9 +7,7 @@ html {
 }
 
 body {
-  @apply text-white font-lato;
-  background: linear-gradient(to right, #0D1B2A, #1B263B);
-  min-height: 100vh;
+  @apply min-h-screen transition-colors duration-500 font-lato;
 }
 
 h1, h2, h3, h4, h5, h6 {
