@@ -4,7 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class', // <-- enables toggling with a class
+  darkMode: 'class', 
   theme: {
     extend: {
       colors: {
@@ -18,9 +18,9 @@ export default {
         inputBorder: '#CFCFCF',
         heroLeft: '#0D1B2A',
         heroRight: '#1B263B',
-        lightBg: '#FFF9F0', // light theme background
-        lightText: '#3C3C3C', // light theme text
-        lightSecondary: '#FFE8A0', // subtle highlights
+        lightBg: '#FFF9F0', 
+        lightText: '#3C3C3C', 
+        lightSecondary: '#FFE8A0', 
       },
       fontFamily: {
         inter: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
