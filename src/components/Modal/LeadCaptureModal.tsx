@@ -26,10 +26,10 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
 
     emailjs
       .sendForm(
-        import.meta.env.VITE_EXPRESSJS_SERVICE_ID,   // Service ID from .env
-        import.meta.env.VITE_EXPRESSJS_TEMPLATE_ID,  // Template ID from .env
+        import.meta.env.VITE_EXPRESSJS_SERVICE_ID,
+        import.meta.env.VITE_EXPRESSJS_TEMPLATE_ID,
         formRef.current,
-        import.meta.env.VITE_EXPRESSJS_PUBLIC_KEY    // Public Key from .env
+        import.meta.env.VITE_EXPRESSJS_PUBLIC_KEY
       )
       .then(
         (__) => {
