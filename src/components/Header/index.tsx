@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { themeAtom } from "../../atom/themeAtom";
 import { useAtom } from "jotai/react";
-import {Sun , Moon} from "lucide-react";
+// import {Sun , Moon} from "lucide-react";
 
 const navItems = [
   { name: "Why Choose Us", to: "whychooseus" },
@@ -28,7 +28,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("hero");
-  const [theme, setTheme] = useAtom(themeAtom);
+  const [theme] = useAtom(themeAtom);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -56,15 +56,25 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
+  // const toggleTheme = () => {
+  //   setTheme(theme === 'dark' ? 'light' : 'dark');
+  // };
 
   return (
     <motion.header
-      className={`fixed top-5 z-50 mx-auto inset-x-0 transition-all duration-500
-        ${isScrolled ? "backdrop-blur-md bg-black/30 shadow-md" : "bg-black/20"} 
-        rounded-2xl w-[95%] max-w-7xl`}
+     className={`fixed top-5 z-50 mx-auto inset-x-0 transition-all duration-500 rounded-2xl w-[95%] max-w-7xl
+        backdrop-blur-xl
+        ${
+          theme === "dark"
+            ? isScrolled
+              ? "bg-black/40 shadow-lg"
+              : "bg-black/20"
+            : isScrolled
+              ? "bg-white/80 shadow-lg"
+              : "bg-white/40"
+        }
+      `}
+
       initial={{ y: -20 }}
       animate={{ y: 0 }}
     >
@@ -87,13 +97,13 @@ const Header: React.FC = () => {
               onClick={() => scrollToSection(item.to)}
               className={`
                 transition-colors cursor-pointer
-                ${activeSection === item.to
-                  ? theme === 'dark'
-                    ? 'text-yellowBrand'
-                    : 'text-heroLeft' // active in light mode
-                  : theme === 'dark'
-                    ? 'text-white hover:text-yellowBrand'
-                    : 'text-lightText hover:text-yellowBrand'}
+                ${
+                  activeSection === item.to
+                    ? "text-yellowBrand"
+                    : theme === "dark"
+                      ? "text-white hover:text-yellowBrand"
+                      : "text-lightText hover:text-yellowBrand"
+                }
               `}
             >
               {item.name}
@@ -101,7 +111,7 @@ const Header: React.FC = () => {
           ))}
         </nav>
 
-        <button
+        {/* <button
           onClick={toggleTheme}
           className={`
             transition-colors
@@ -109,20 +119,24 @@ const Header: React.FC = () => {
           `}
         >
           {theme === 'dark' ? <Sun /> : <Moon />}
-        </button>
+        </button> */}
       </div>
 
       <div className="flex items-center space-x-4 md:hidden">
-        <button
+        {/* <button
           onClick={toggleTheme}
-          className="text-white transition-colors hover:text-yellowBrand"
+          className={`transition-colors 
+            ${theme === "dark" ? "text-white" : "text-lightText"} 
+            hover:text-yellowBrand`}
         >
-          {theme === 'dark' ? <Sun /> : <Moon />}
-        </button>
+          {theme === "dark" ? <Sun /> : <Moon />}
+        </button> */}
 
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="text-white transition-colors hover:text-yellowBrand"
+          className={`transition-colors 
+            ${theme === "dark" ? "text-white" : "text-lightText"} 
+            hover:text-yellowBrand`}
         >
           {menuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>

@@ -52,34 +52,25 @@ const HeroSection: React.FC = () => {
           environments.
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col items-center justify-center gap-4 mt-10 sm:flex-row"
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="flex flex-col items-center justify-center gap-4 mt-10 sm:flex-row"
+      >
+        <button
+          onClick={() => setOpenModal(true)}
+          className={`
+            px-8 py-4 font-bold rounded-lg transition
+            ${theme === 'dark'
+              ? 'bg-yellowBrand text-black hover:bg-yellow-400'
+              : 'bg-yellowBrand text-black hover:bg-yellow-400'}
+          `}
         >
-          <button
-            onClick={() => setOpenModal(true)}
-            className={`
-              px-8 py-4 font-bold rounded-lg transition
-              ${theme === 'dark' ? 'bg-yellowBrand text-black hover:bg-yellow-400' : 'bg-yellowBrand text-black hover:bg-yellow-400'}
-            `}
-          >
-            Book a Demo
-          </button>
+          Book a Demo
+        </button>
+      </motion.div>
 
-          <button
-            onClick={() => setOpenModal(true)}
-            className={`
-              px-8 py-4 rounded-lg border transition
-              ${theme === 'dark'
-                ? 'border-white/30 hover:bg-white/10 text-white'
-                : 'border-lightText/50 hover:bg-lightSecondary/20 text-lightText'}
-            `}
-          >
-            Try the AI Voice Agent Live
-          </button>
-        </motion.div>
       </div>
       <LeadCaptureModal open={openModal} onClose={() => setOpenModal(false)} />
     </div>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { useAtom } from 'jotai/react';
 import { themeAtom } from '../../atom/themeAtom';
 
@@ -32,13 +31,13 @@ const Footer: React.FC = () => {
       }`}
     >
       <div className="flex flex-col items-center justify-between px-6 mx-auto max-w-7xl md:flex-row md:px-12">
+
         <div 
-        onClick={() => {
-          scrollToSection("hero");
-        }} 
-        className={`mb-4 cursor-pointer text-xl font-bold md:mb-0 transition-colors duration-500 ${
-          theme === 'dark' ? 'text-yellowBrand' : 'text-heroLeft'
-        }`}>
+          onClick={() => scrollToSection("hero")} 
+          className={`mb-4 cursor-pointer text-xl font-bold md:mb-0 transition-colors duration-500 ${
+            theme === 'dark' ? 'text-yellowBrand' : 'text-heroLeft'
+          }`}
+        >
           AI Voice
         </div>
 
@@ -58,17 +57,8 @@ const Footer: React.FC = () => {
           ))}
         </div>
 
-        <div className="flex space-x-4">
-          <a href="#" className={`transition-colors duration-500 ${
-            theme === 'dark' ? 'text-white hover:text-yellowBrand' : 'text-lightText hover:text-yellowBrand'
-          }`}><FaTwitter size={20} /></a>
-          <a href="#" className={`transition-colors duration-500 ${
-            theme === 'dark' ? 'text-white hover:text-yellowBrand' : 'text-lightText hover:text-yellowBrand'
-          }`}><FaLinkedin size={20} /></a>
-          <a href="#" className={`transition-colors duration-500 ${
-            theme === 'dark' ? 'text-white hover:text-yellowBrand' : 'text-lightText hover:text-yellowBrand'
-          }`}><FaGithub size={20} /></a>
-        </div>
+        {/* 🔥 Removed social icons from here */}
+
       </div>
 
       <p className={`mt-6 text-sm text-center transition-colors duration-500 ${
