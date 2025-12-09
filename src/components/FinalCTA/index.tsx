@@ -68,7 +68,6 @@ const FinalCTA: React.FC = () => {
         </div>
       </section>
 
-      {/* LEAD FORM MODAL */}
       <LeadCaptureModal open={openModal} onClose={() => setOpenModal(false)} />
     </>
   );

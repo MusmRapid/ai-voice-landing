@@ -61,7 +61,6 @@ const FeaturesSection: React.FC = () => {
       }`}
     >
       <div className="px-6 mx-auto max-w-7xl">
-        {/* Header */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -86,7 +85,6 @@ const FeaturesSection: React.FC = () => {
           accuracy, scalability, and world-class customer experiences.
         </motion.p>
 
-        {/* Features Grid */}
         <div className="grid gap-10 mt-16 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => {
             const Icon = feature.icon;
@@ -104,7 +102,6 @@ const FeaturesSection: React.FC = () => {
                     : "bg-lightBg/30 border-lightText/10 hover:bg-lightSecondary/20"
                 }`}
               >
-                {/* Icon */}
                 <div
                   className={`flex items-center justify-center mb-6 transition border w-14 h-14 rounded-xl ${
                     theme === "dark"
@@ -115,7 +112,6 @@ const FeaturesSection: React.FC = () => {
                   <Icon className="w-8 h-8 text-yellowBrand" />
                 </div>
 
-                {/* Title */}
                 <h3
                   className={`mb-4 text-xl font-semibold md:text-2xl transition-colors duration-500 ${
                     theme === "dark" ? "text-white" : "text-lightText"
@@ -124,7 +120,6 @@ const FeaturesSection: React.FC = () => {
                   {feature.title}
                 </h3>
 
-                {/* Description */}
                 <p
                   className={`transition-colors duration-500 ${
                     theme === "dark" ? "text-gray-300" : "text-lightText/80"

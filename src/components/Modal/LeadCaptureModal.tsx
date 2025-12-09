@@ -15,7 +15,6 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center">
-      {/* BACKDROP */}
       <motion.div
         onClick={onClose}
         initial={{ opacity: 0 }}
@@ -24,7 +23,6 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
         className="absolute inset-0 cursor-pointer bg-black/60 backdrop-blur-sm"
       />
 
-      {/* MODAL */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -79,7 +77,6 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
           </button>
         </form>
 
-        {/* CLOSE BUTTON */}
         <button
           onClick={onClose}
           className="absolute text-xl top-3 right-5 opacity-70 hover:opacity-100"
