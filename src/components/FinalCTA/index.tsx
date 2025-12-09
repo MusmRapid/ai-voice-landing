@@ -54,7 +54,7 @@ const FinalCTA: React.FC = () => {
               Book a Demo
             </button>
 
-            <button
+            {/* <button
               onClick={() => setOpenModal(true)}
               className={`px-10 py-4 border rounded-lg transition-colors duration-500 ${
                 theme === "dark"
@@ -63,7 +63,7 @@ const FinalCTA: React.FC = () => {
               }`}
             >
               Speak with an AI Deployment Specialist
-            </button>
+            </button> */}
           </motion.div>
         </div>
       </section>
