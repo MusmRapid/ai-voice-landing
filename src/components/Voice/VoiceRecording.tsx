@@ -14,15 +14,15 @@ type Recording = {
 const recordings: Recording[] = [
   {
     id: "rec1",
-    title: "Agent Capture #1",
+    title: "Agent Kylie",
     subtitle: "Live call capture • 01:56",
-    src: "/src/assets/audio/audio-1.mp3",
+    src: "/audio/audio-1.mp3",
   },
   {
     id: "rec2",
-    title: "Agent Capture #2",
+    title: "Agent Lorie",
     subtitle: "Live call capture • 02:05",
-    src: "/src/assets/audio/audio-2.mp3",
+    src: "/audio/audio-2.mp3",
   },
 ];
 
@@ -35,6 +35,8 @@ const VoiceRecordings: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const scrubRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
+
+  const activeRecording = recordings.find((r) => r.id === activeId)!;
 
   const updateProgress = () => {
     const audio = audioRef.current;
@@ -91,8 +93,10 @@ const VoiceRecordings: React.FC = () => {
   return (
     <section
       id="recordings"
-      className={`relative py-20 transition-colors duration-500 ${
-        theme === "dark" ? "bg-black/20 text-white" : "bg-lightBg text-lightText"
+      className={`relative py-20 md:mt-10 mt-2 transition-colors duration-500 ${
+        theme === "dark"
+          ? "bg-black/20 text-white"
+          : "bg-lightBg text-lightText"
       }`}
     >
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-heroLeft/30 via-black/0 to-yellowBrand/20 blur-3xl" />
@@ -104,12 +108,10 @@ const VoiceRecordings: React.FC = () => {
           className="flex items-center justify-between mb-10"
         >
           <div>
-            <h2 className="text-4xl font-bold">
-              Voice Recordings
-            </h2>
+            <h2 className="text-4xl font-bold">Voice Recordings</h2>
             <p className="mt-2 ">
-              These are captured recordings from our agent in live action.
-              Drag the wave to scrub and feel the flow.
+              These are captured recordings from our agent in live action. Click
+              a recording to load it in the player.
             </p>
           </div>
 
@@ -119,81 +121,97 @@ const VoiceRecordings: React.FC = () => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {recordings.map((rec) => (
-            <motion.div
-              key={rec.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7 }}
-              className={`relative rounded-2xl p-6 backdrop-blur-xl border ${
-                theme === "dark"
-                  ? "bg-black/40 border-white/10"
-                  : "bg-white/40 border-lightText/10"
-              } ${activeId === rec.id ? "ring-2 ring-yellowBrand/60" : ""}`}
-            >
-              <div className="flex items-start justify-between gap-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="col-span-2 space-y-4">
+            {recordings.map((rec) => (
+              <motion.div
+                key={rec.id}
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                className={`rounded-2xl p-5 backdrop-blur-xl border flex items-center justify-between gap-4 cursor-pointer ${
+                  theme === "dark"
+                    ? "bg-black/30 border-white/10"
+                    : "bg-white/30 border-lightText/10"
+                } ${activeId === rec.id ? "ring-2 ring-yellowBrand/60" : ""}`}
+                onClick={() => {
+                  setActiveId(rec.id);
+                  setPlaying(false);
+                  setProgress(0);
+                }}
+              >
                 <div>
                   <div className="flex items-center gap-2">
                     <AudioWaveform className="text-yellowBrand" />
-                    <h3 className="text-xl font-bold">{rec.title}</h3>
+                    <h4 className="font-bold">{rec.title}</h4>
                   </div>
-                  <p className="mt-1 ">{rec.subtitle}</p>
+                  <p className="mt-1 text-lightText/70">{rec.subtitle}</p>
                 </div>
 
-                <button
-                  className={`rounded-full p-2 transition-transform ${
-                    activeId === rec.id ? "scale-110" : ""
-                  }`}
-                  onClick={() => {
-                    setActiveId(rec.id);
-                    setPlaying(false);
-                    setProgress(0);
-                  }}
-                >
-                  <span>Select</span>
-                </button>
+                <span className="text-sm text-lightText/70">
+                  {activeId === rec.id ? "Playing" : ""}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`col-span-1 rounded-2xl p-6 backdrop-blur-xl border ${
+              theme === "dark"
+                ? "bg-black/40 border-white/10"
+                : "bg-white/40 border-lightText/10"
+            }`}
+          >
+            <audio
+              ref={audioRef}
+              src={activeRecording.src}
+              preload="metadata"
+            />
+
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <AudioWaveform className="text-yellowBrand" />
+                  <h3 className="text-xl font-bold">{activeRecording.title}</h3>
+                </div>
+                <p className="mt-1 text-lightText/70">
+                  {activeRecording.subtitle}
+                </p>
               </div>
 
-              {activeId === rec.id && (
-                <div className="mt-6">
-                  <audio ref={audioRef} src={rec.src} preload="metadata" />
+              <button
+                onClick={togglePlay}
+                className="relative flex items-center justify-center w-16 h-16 text-black rounded-full shadow-xl bg-yellowBrand"
+              >
+                {playing ? <Pause size={28} /> : <Play size={28} />}
+                {playing && (
+                  <motion.span
+                    className="absolute inset-0 border-2 rounded-full border-yellowBrand"
+                    animate={{ scale: [1, 1.4], opacity: [0.6, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                  />
+                )}
+              </button>
+            </div>
 
-                  <div className="flex items-center justify-between gap-4">
-                    <button
-                      onClick={togglePlay}
-                      className={`p-3 rounded-full transition ${
-                        theme === "dark"
-                          ? "bg-yellowBrand/20 hover:bg-yellowBrand/30"
-                          : "bg-yellowBrand/20 hover:bg-yellowBrand/30"
-                      }`}
-                    >
-                      {playing ? <Pause /> : <Play />}
-                    </button>
-
-                    <div
-                      ref={scrubRef}
-                      onClick={handleScrub}
-                      className="relative w-full h-3 rounded-full cursor-pointer bg-white/10"
-                    >
-                      <div
-                        style={{ width: `${progress}%` }}
-                        className="absolute inset-y-0 left-0 rounded-full bg-yellowBrand/70"
-                      />
-                      <div
-                        style={{ left: `${progress}%` }}
-                        className="absolute w-4 h-4 -translate-y-1/2 rounded-full shadow-lg top-1/2 bg-white/90"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-3 text-sm">
-                    Tip: Click the wave to scrub anywhere
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          ))}
+            <div className="mt-6">
+              <div
+                ref={scrubRef}
+                onClick={handleScrub}
+                className="relative w-full h-2 rounded-full cursor-pointer bg-gray-400/20"
+              >
+                <div
+                  style={{ width: `${progress}%` }}
+                  className="absolute inset-y-0 left-0 rounded-full bg-yellowBrand"
+                />
+              </div>
+              <div className="mt-2 text-xs text-lightText/70">
+                Tip: Click the bar to scrub
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

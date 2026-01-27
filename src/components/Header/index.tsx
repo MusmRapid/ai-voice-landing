@@ -3,15 +3,16 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { themeAtom } from "../../atom/themeAtom";
 import { useAtom } from "jotai/react";
-import {Sun , Moon} from "lucide-react";
+// import {Sun , Moon} from "lucide-react";
+import logo from '/logo.png';
 
 const navItems = [
+  { name: "Recordings", to: "recordings" },
   { name: "Why Choose Us", to: "whychooseus" },
   { name: "Features", to: "features" },
   { name: "Regions", to: "regions" },
   { name: "Advantages", to: "advantages" },
   { name: "Testimonials", to: "testimonials" },
-  { name: "Recordings", to: "recordings" },
   { name: "Contact", to: "contact" },
 ];
 
@@ -29,7 +30,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("hero");
-  const [theme, setTheme] = useAtom(themeAtom);
+  const [theme] = useAtom(themeAtom);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -57,9 +58,9 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
+  // const toggleTheme = () => {
+  //   setTheme(theme === 'dark' ? 'light' : 'dark');
+  // };
 
   return (
     <motion.header
@@ -87,7 +88,7 @@ const Header: React.FC = () => {
         }}
         className={`text-2xl font-bold cursor-pointer select-none ${theme === 'dark' ? 'text-yellowBrand' : 'text-heroLeft'}`}
       >
-        AI Voice
+        <img src={logo} alt="Logo" className="w-32 h-auto"/>
       </div>
 
       <div className="items-center hidden space-x-6 md:flex">
@@ -112,7 +113,7 @@ const Header: React.FC = () => {
           ))}
         </nav>
 
-        <button
+        {/* <button
           onClick={toggleTheme}
           className={`
             transition-colors
@@ -120,18 +121,18 @@ const Header: React.FC = () => {
           `}
         >
           {theme === 'dark' ? <Sun /> : <Moon />}
-        </button>
+        </button> */}
       </div>
 
       <div className="flex items-center space-x-4 md:hidden">
-        <button
+        {/* <button
           onClick={toggleTheme}
           className={`transition-colors 
             ${theme === "dark" ? "text-white" : "text-lightText"} 
             hover:text-yellowBrand`}
         >
           {theme === "dark" ? <Sun /> : <Moon />}
-        </button>
+        </button> */}
 
         <button
           onClick={() => setMenuOpen(!menuOpen)}
