@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { themeAtom } from "../../atom/themeAtom";
 import { useAtom } from "jotai/react";
-// import {Sun , Moon} from "lucide-react";
+import {Sun , Moon} from "lucide-react";
 
 const navItems = [
   { name: "Why Choose Us", to: "whychooseus" },
@@ -11,6 +11,7 @@ const navItems = [
   { name: "Regions", to: "regions" },
   { name: "Advantages", to: "advantages" },
   { name: "Testimonials", to: "testimonials" },
+  { name: "Recordings", to: "recordings" },
   { name: "Contact", to: "contact" },
 ];
 
@@ -28,7 +29,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("hero");
-  const [theme] = useAtom(themeAtom);
+  const [theme, setTheme] = useAtom(themeAtom);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -56,9 +57,9 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // const toggleTheme = () => {
-  //   setTheme(theme === 'dark' ? 'light' : 'dark');
-  // };
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   return (
     <motion.header
@@ -111,7 +112,7 @@ const Header: React.FC = () => {
           ))}
         </nav>
 
-        {/* <button
+        <button
           onClick={toggleTheme}
           className={`
             transition-colors
@@ -119,18 +120,18 @@ const Header: React.FC = () => {
           `}
         >
           {theme === 'dark' ? <Sun /> : <Moon />}
-        </button> */}
+        </button>
       </div>
 
       <div className="flex items-center space-x-4 md:hidden">
-        {/* <button
+        <button
           onClick={toggleTheme}
           className={`transition-colors 
             ${theme === "dark" ? "text-white" : "text-lightText"} 
             hover:text-yellowBrand`}
         >
           {theme === "dark" ? <Sun /> : <Moon />}
-        </button> */}
+        </button>
 
         <button
           onClick={() => setMenuOpen(!menuOpen)}
