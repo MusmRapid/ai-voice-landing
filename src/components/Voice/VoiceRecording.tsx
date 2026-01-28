@@ -14,12 +14,18 @@ type Recording = {
 const recordings: Recording[] = [
   {
     id: "rec1",
+    title: "Agent Rachel",
+    subtitle: "Live call capture • 01:10",
+    src: "/audio/audio-main.mp3",
+  },
+  {
+    id: "rec2",
     title: "Agent Kylie",
     subtitle: "Live call capture • 01:56",
     src: "/audio/audio-1.mp3",
   },
   {
-    id: "rec2",
+    id: "rec3",
     title: "Agent Lorie",
     subtitle: "Live call capture • 02:05",
     src: "/audio/audio-2.mp3",
