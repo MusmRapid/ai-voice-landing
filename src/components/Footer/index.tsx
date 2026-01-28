@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAtom } from 'jotai/react';
 import { themeAtom } from '../../atom/themeAtom';
+import logo from '/logo.png';
 
 const Footer: React.FC = () => {
   const [theme] = useAtom(themeAtom);
@@ -28,14 +29,14 @@ const Footer: React.FC = () => {
             theme === 'dark' ? 'text-yellowBrand' : 'text-heroLeft'
           }`}
         >
-          AI Voice
+          <img src={logo} alt="AI Voice Agent Logo" className="w-32 h-auto" />
         </div>
       </div>
 
       <p className={`mt-6 text-sm text-center transition-colors duration-500 ${
         theme === 'dark' ? 'text-gray-400' : 'text-lightText/80'
       }`}>
-        &copy; {new Date().getFullYear()} AI Voice Agent. All rights reserved.
+        &copy; {new Date().getFullYear()} Humalogue. All rights reserved.
       </p>
     </footer>
   );
