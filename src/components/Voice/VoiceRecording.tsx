@@ -15,7 +15,7 @@ const recordings: Recording[] = [
   {
     id: "rec1",
     title: "Agent Rachel",
-    subtitle: "Live call capture • 01:10",
+    subtitle: "Live call capture • 01:11",
     src: "/audio/audio-main.mp3",
   },
   {
