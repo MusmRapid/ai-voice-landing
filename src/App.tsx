@@ -1,37 +1,31 @@
-// import { useAtom } from "jotai";
-import AdvantagesSection from "./components/AdvantagesSection";
-import FeaturesSection from "./components/FeaturesSection";
-import FinalCTA from "./components/FinalCTA";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import HeroSection from "./components/HeroSection";
-import RegionsSection from "./components/RegionsSection";
-import ScrollToTop from "./components/ScrollToTop";
-import TestimonialsSection from "./components/TestimonialsSection";
-import WhyChooseUs from "./components/WhyChooseUs";
-// import { themeAtom } from "./atom/themeAtom";
-import VoiceRecordings from "./components/Voice/VoiceRecording";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import AcceptableUsePolicy from "./pages/AcceptableUsePolicy";
+import ResponsibleAIPolicy from "./pages/ResponsibleAIPolicy";
+import ScrollTop from "./components/ScrollToTop/ScrollTop";
 
 function App() {
-  // const [theme] = useAtom(themeAtom);
-
   return (
-    // <div className={`transition-colors duration-500 ${theme === 'dark' ? 'bg-heroLeft' : 'bg-lightBg'}`}>
-    <div className="transition-colors duration-500 bg-lightBg">
-      <Header />
-      <HeroSection />
-      <VoiceRecordings />
-      <WhyChooseUs />
-      <FeaturesSection />
-      <RegionsSection />
-      <AdvantagesSection />
-      <TestimonialsSection />
-      <FinalCTA />
-      <Footer />
-      <ScrollToTop />
-    </div>
+    <BrowserRouter>
+    <ScrollTop />
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+        <Route path="/acceptable-use-policy" element={<AcceptableUsePolicy />} />
+
+        <Route path="/responsible-ai-policy" element={<ResponsibleAIPolicy />} />
+
+      </Routes>
+    </BrowserRouter>
   );
 }
-
 
 export default App;
