@@ -11,40 +11,45 @@ type Recording = {
   src: string;
   avatar: string;
   transcript: string;
+  duration: number;
 };
 
 const recordings: Recording[] = [
   {
     id: "bella",
     title: "Agent Bella",
-    subtitle: "Live call capture • 01:11",
+    subtitle: "Voice Sample",
     src: "/audio/Bella-front.wav",
     avatar: "/Bella.png",
     transcript: "Hi there! Thanks so much for reaching out. I'm Bella, and I'm happy to help whether you're looking to learn about our products, need sales support, or have customer service questions. What brings you in today?",
+    duration: 11,
   },
   {
     id: "emma",
     title: "Agent Emma",
-    subtitle: "Live call capture • 02:45",
+    subtitle: "Voice Sample",
     src: "/audio/emma-front.wav",
     avatar: "/Emma.jpg",
     transcript: "Hi, I'm emma. I'm here to help you with whatever you need—whether that's sales assistance, learning more about our products, or getting support for any questions you might have. I'm all ears!",
+    duration: 12,
   },
   {
     id: "eric",
     title: "Agent Eric",
-    subtitle: "Live call capture • 01:30",
+    subtitle: "Voice Sample",
     src: "/audio/eric-front.wav",
     avatar: "/eric.png",
     transcript: "Good afternoon, thank you for calling. This is Eric. I'm here to help you with sales inquiries, detailed product information, or any customer support you might need. What can I assist you with today?",
+    duration: 10,
   },
   {
     id: "olivia",
     title: "Agent Olivia",
-    subtitle: "Live call capture • 02:00",
+    subtitle: "Voice Sample",
     src: "/audio/olivia-front.wav",
     avatar: "/Olivia.png",
     transcript: "Hello, this is Olivia. I can help you with sales, provide you with comprehensive product information, or assist with any customer support needs. To get you the right solution quickly, what can I help you with?",
+    duration: 12,
   },
 ];
 
@@ -53,6 +58,7 @@ const VoiceRecordings: React.FC = () => {
   const [activeId, setActiveId] = useState<string>(recordings[0].id);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const scrubRef = useRef<HTMLDivElement | null>(null);
@@ -64,6 +70,7 @@ const VoiceRecordings: React.FC = () => {
     const audio = audioRef.current;
     if (!audio || !audio.duration) return;
     setProgress((audio.currentTime / audio.duration) * 100);
+    setCurrentTime(Math.floor(audio.currentTime));
     rafRef.current = requestAnimationFrame(updateProgress);
   };
 
@@ -130,10 +137,11 @@ const VoiceRecordings: React.FC = () => {
           className="flex items-center justify-between mb-10"
         >
           <div>
-            <h2 className="text-4xl font-bold">Voice Recordings</h2>
+            <h2 className="text-4xl font-bold">Meet Our AI Agents</h2>
             <p className="mt-2 ">
-              These are captured recordings from our agent in live action. Click
-              a recording to load it in the player.
+              Listen to the natural-sounding voices of our AI agents. Each agent is
+              tailored to deliver exceptional customer experiences across diverse
+              call center operations.
             </p>
           </div>
 
@@ -160,6 +168,7 @@ const VoiceRecordings: React.FC = () => {
                   setActiveId(rec.id);
                   setPlaying(false);
                   setProgress(0);
+                  setCurrentTime(0);
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -239,8 +248,9 @@ const VoiceRecordings: React.FC = () => {
                   className="absolute inset-y-0 left-0 rounded-full bg-yellowBrand"
                 />
               </div>
-              <div className="mt-2 text-xs text-lightText/70">
-                Tip: Click the bar to scrub
+              <div className="flex items-center justify-between mt-2 text-xs text-lightText/70">
+                <span>{currentTime}s / {activeRecording.duration}s</span>
+                <span>Click the bar to scrub</span>
               </div>
             </div>
 
