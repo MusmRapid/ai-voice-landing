@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, Pause, AudioWaveform, Sparkles } from "lucide-react";
+import { Play, Pause, Sparkles } from "lucide-react";
 import { useAtom } from "jotai/react";
 import { themeAtom } from "../../atom/themeAtom";
 
@@ -9,20 +9,42 @@ type Recording = {
   title: string;
   subtitle: string;
   src: string;
+  avatar: string;
+  transcript: string;
 };
 
 const recordings: Recording[] = [
   {
-    id: "rec1",
-    title: "Agent Rachel",
+    id: "bella",
+    title: "Agent Bella",
     subtitle: "Live call capture • 01:11",
-    src: "/audio/audio-main.mp3",
+    src: "/audio/Bella-front.wav",
+    avatar: "/Bella.png",
+    transcript: "Hi there! Thanks so much for reaching out. I'm Bella, and I'm happy to help whether you're looking to learn about our products, need sales support, or have customer service questions. What brings you in today?",
   },
   {
-    id: "rec2",
-    title: "Agent Franky",
+    id: "emma",
+    title: "Agent Emma",
     subtitle: "Live call capture • 02:45",
-    src: "/audio/audio-1.mp3",
+    src: "/audio/emma-front.wav",
+    avatar: "/Emma.jpg",
+    transcript: "Hi, I'm emma. I'm here to help you with whatever you need—whether that's sales assistance, learning more about our products, or getting support for any questions you might have. I'm all ears!",
+  },
+  {
+    id: "eric",
+    title: "Agent Eric",
+    subtitle: "Live call capture • 01:30",
+    src: "/audio/eric-front.wav",
+    avatar: "/eric.png",
+    transcript: "Good afternoon, thank you for calling. This is Eric. I'm here to help you with sales inquiries, detailed product information, or any customer support you might need. What can I assist you with today?",
+  },
+  {
+    id: "olivia",
+    title: "Agent Olivia",
+    subtitle: "Live call capture • 02:00",
+    src: "/audio/olivia-front.wav",
+    avatar: "/Olivia.png",
+    transcript: "Hello, this is Olivia. I can help you with sales, provide you with comprehensive product information, or assist with any customer support needs. To get you the right solution quickly, what can I help you with?",
   },
 ];
 
@@ -140,12 +162,18 @@ const VoiceRecordings: React.FC = () => {
                   setProgress(0);
                 }}
               >
-                <div>
-                  <div className="flex items-center gap-2">
-                    <AudioWaveform className="text-yellowBrand" />
-                    <h4 className="font-bold">{rec.title}</h4>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={rec.avatar}
+                    alt={rec.title}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-yellowBrand/50"
+                  />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-bold">{rec.title}</h4>
+                    </div>
+                    <p className="mt-1 text-lightText/70">{rec.subtitle}</p>
                   </div>
-                  <p className="mt-1 text-lightText/70">{rec.subtitle}</p>
                 </div>
 
                 <span className="text-sm text-lightText/70">
@@ -171,14 +199,18 @@ const VoiceRecordings: React.FC = () => {
             />
 
             <div className="flex items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <AudioWaveform className="text-yellowBrand" />
+              <div className="flex items-center gap-4">
+                <img
+                  src={activeRecording.avatar}
+                  alt={activeRecording.title}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-yellowBrand/50"
+                />
+                <div>
                   <h3 className="text-xl font-bold">{activeRecording.title}</h3>
+                  <p className="mt-1 text-lightText/70">
+                    {activeRecording.subtitle}
+                  </p>
                 </div>
-                <p className="mt-1 text-lightText/70">
-                  {activeRecording.subtitle}
-                </p>
               </div>
 
               <button
@@ -210,6 +242,25 @@ const VoiceRecordings: React.FC = () => {
               <div className="mt-2 text-xs text-lightText/70">
                 Tip: Click the bar to scrub
               </div>
+            </div>
+
+            <div className="mt-6 p-4 rounded-lg bg-black/10 dark:bg-white/5">
+              <p className="text-sm leading-relaxed">
+                {activeRecording.transcript.split(' ').map((word, index) => {
+                  const words = activeRecording.transcript.split(' ');
+                  const revealIndex = Math.floor((progress / 100) * words.length);
+                  return (
+                    <span
+                      key={index}
+                      className={`transition-opacity duration-300 ${
+                        index <= revealIndex ? 'opacity-100' : 'opacity-30'
+                      }`}
+                    >
+                      {word}{' '}
+                    </span>
+                  );
+                })}
+              </p>
             </div>
           </motion.div>
         </div>
