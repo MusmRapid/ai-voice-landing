@@ -75,11 +75,11 @@ const RegionsSection: React.FC = () => {
                 {region.country}
               </h3>
 
-              {region.comingSoon && (
+              {/* {region.comingSoon && (
                 <p className="mt-2 font-medium tracking-wide text-center text-yellowBrand">
                   Coming Soon
                 </p>
-              )}
+              )} */}
             </motion.div>
           ))}
         </div>
