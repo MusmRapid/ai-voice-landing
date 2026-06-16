@@ -64,7 +64,10 @@ const RegionsSection: React.FC = () => {
               } ${region.comingSoon ? "opacity-70" : ""}`}
             >
               <div className="flex justify-center mb-6">
-                <Flag code={region.code} style={{ width: 60, height: 45 }} />
+                {(() => {
+                  const ResolvedFlag: any = (Flag as any)?.default ?? Flag;
+                  return <ResolvedFlag code={region.code} style={{ width: 60, height: 45 }} />;
+                })()}
               </div>
 
               <h3

@@ -51,6 +51,87 @@ const recordings: Recording[] = [
     transcript: "Hello, this is Olivia. I can help you with sales, provide you with comprehensive product information, or assist with any customer support needs. To get you the right solution quickly, what can I help you with?",
     duration: 12,
   },
+  {
+    id: "amanda",
+    title: "Agent Amanda",
+    subtitle: "Voice Sample",
+    src: "/audio/amanda_intro_v1.wav",
+    avatar: "/Amanda.png",
+    transcript: "Hi, I'm Amanda, a Senior Medicare Outreach Specialist. How are you doing today?",
+    duration: 4,
+  },
+  {
+    id: "angela",
+    title: "Agent Angela",
+    subtitle: "Voice Sample",
+    src: "/audio/angela_intro_v1.wav",
+    avatar: "/Angela.png",
+    transcript: "Hi, I'm Angela, a Senior Medicare Outreach Specialist. How are you doing today?",
+    duration: 3,
+  },
+  {
+    id: "clara",
+    title: "Agent Clara",
+    subtitle: "Voice Sample",
+    src: "/audio/clara_intro_v1.wav",
+    avatar: "/Clara.png",
+    transcript: "This is Clara from US Auto-Care. I'm reaching out to see if we help you save on your auto insurance.",
+    duration: 5,
+  },
+  {
+    id: "heather",
+    title: "Agent Heather",
+    subtitle: "Voice Sample",
+    src: "/audio/heather_intro_v1.wav",
+    avatar: "/Heather.png",
+    transcript: "Hi, I'm Heather, a Senior Medicare Outreach Specialist. How are you doing today?",
+    duration: 3,
+  },
+  {
+    id: "lauren",
+    title: "Agent Lauren",
+    subtitle: "Voice Sample",
+    src: "/audio/lauren_intro_v1.wav",
+    avatar: "/Lauran.png",
+    transcript: "Hi, I'm Lauren, a Senior Medicare Outreach Specialist. How are you doing today?",
+    duration: 5,
+  },
+  {
+    id: "megan",
+    title: "Agent Megan",
+    subtitle: "Voice Sample",
+    src: "/audio/megan_intro_v1.wav",
+    avatar: "/Megan.png",
+    transcript: "Hi, I'm Megan, a Senior Medicare Outreach Specialist. How are you doing today?",
+    duration: 3,
+  },
+  {
+    id: "mia",
+    title: "Agent Mia",
+    subtitle: "Voice Sample",
+    src: "/audio/mia_intro_v1.wav",
+    avatar: "/Mia.png",
+    transcript: "Hi, I'm Mia, a Senior Medicare Outreach Specialist. How are you doing today?",
+    duration: 4,
+  },
+  {
+    id: "sophia",
+    title: "Agent Sophia",
+    subtitle: "Voice Sample",
+    src: "/audio/sophia_intro_v1.wav",
+    avatar: "/Sophia.png",
+    transcript: "Hi, I'm Sophia, a Senior Medicare Outreach Specialist. How are you doing today?",
+    duration: 5,
+  },
+  {
+    id: "zara",
+    title: "Agent Zara",
+    subtitle: "Voice Sample",
+    src: "/audio/zara_intro_v1.wav",
+    avatar: "/Zara.png",
+    transcript: "This is Zara from Accident Management Services. We help verify accident details and check if any compensation is available.",
+    duration: 6,
+  },
 ];
 
 const VoiceRecordings: React.FC = () => {
@@ -68,9 +149,12 @@ const VoiceRecordings: React.FC = () => {
 
   const updateProgress = () => {
     const audio = audioRef.current;
-    if (!audio || !audio.duration) return;
-    setProgress((audio.currentTime / audio.duration) * 100);
-    setCurrentTime(Math.floor(audio.currentTime));
+    if (!audio) return;
+    if (audio.duration && !isNaN(audio.duration)) {
+      const newProgress = (audio.currentTime / audio.duration) * 100;
+      setProgress(Math.min(100, Math.max(0, newProgress)));
+      setCurrentTime(Math.floor(audio.currentTime));
+    }
     rafRef.current = requestAnimationFrame(updateProgress);
   };
 
@@ -78,15 +162,28 @@ const VoiceRecordings: React.FC = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const onLoaded = () => {
-      setProgress((audio.currentTime / audio.duration) * 100);
+    // Reset progress when audio changes
+    setProgress(0);
+    setCurrentTime(0);
+
+    const onLoadedMetadata = () => {
+      // Ensure progress is set to 0 when metadata loads
+      setProgress(0);
+      setCurrentTime(0);
     };
 
-    audio.addEventListener("loadedmetadata", onLoaded);
-    audio.addEventListener("ended", () => setPlaying(false));
+    const onEnded = () => {
+      setPlaying(false);
+      setProgress(0);
+      setCurrentTime(0);
+    };
+
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("ended", onEnded);
 
     return () => {
-      audio.removeEventListener("loadedmetadata", onLoaded);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("ended", onEnded);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [activeId]);
@@ -122,7 +219,7 @@ const VoiceRecordings: React.FC = () => {
   return (
     <section
       id="recordings"
-      className={`relative py-20 md:mt-10 mt-2 transition-colors duration-500 ${
+      className={`relative py-20 md:py-24 transition-colors duration-500 ${
         theme === "dark"
           ? "bg-black/20 text-white"
           : "bg-lightBg text-lightText"
@@ -132,148 +229,161 @@ const VoiceRecordings: React.FC = () => {
       <div className="relative px-6 mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex items-center justify-between mb-10"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12 md:mb-16"
         >
-          <div>
-            <h2 className="text-4xl font-bold">Meet Our AI Agents</h2>
-            <p className="mt-2 ">
-              Listen to the natural-sounding voices of our AI agents. Each agent is
-              tailored to deliver exceptional customer experiences across diverse
-              call center operations.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Sparkles className="text-yellowBrand" />
-            <span className="text-sm ">Out of this world</span>
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <div>
+              <h2 className="text-3xl font-bold md:text-5xl">Meet Our AI Agents</h2>
+              <p className="mt-3 md:text-lg">
+                Listen to the natural-sounding voices of our AI agents. Each agent is
+                tailored to deliver exceptional customer experiences across diverse
+                call center operations.
+              </p>
+            </div>
+            <div className="flex items-center flex-shrink-0 gap-3">
+              <Sparkles className="text-yellowBrand" />
+              <span className="text-sm whitespace-nowrap">Out of this world</span>
+            </div>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          <div className="col-span-2 space-y-4">
-            {recordings.map((rec) => (
-              <motion.div
-                key={rec.id}
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                className={`rounded-2xl p-5 backdrop-blur-xl border flex items-center justify-between gap-4 cursor-pointer ${
-                  theme === "dark"
-                    ? "bg-black/30 border-white/10"
-                    : "bg-white/30 border-lightText/10"
-                } ${activeId === rec.id ? "ring-2 ring-yellowBrand/60" : ""}`}
-                onClick={() => {
-                  setActiveId(rec.id);
-                  setPlaying(false);
-                  setProgress(0);
-                  setCurrentTime(0);
-                }}
-              >
-                <div className="flex items-center gap-4">
-                  <img
-                    src={rec.avatar}
-                    alt={rec.title}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-yellowBrand/50"
-                  />
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-bold">{rec.title}</h4>
-                    </div>
-                    <p className="mt-1 text-lightText/70">{rec.subtitle}</p>
-                  </div>
-                </div>
+        {/* Voice Selection Grid */}
+        <div className="grid gap-4 mb-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {recordings.map((rec, index) => (
+            <motion.button
+              key={rec.id}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
+              onClick={() => {
+                setActiveId(rec.id);
+                setPlaying(false);
+                setProgress(0);
+                setCurrentTime(0);
+              }}
+              className={`p-4 rounded-2xl border backdrop-blur-md transition-all duration-300 flex flex-col items-center gap-3 ${
+                theme === "dark"
+                  ? "bg-white/5 border-white/10 hover:bg-white/10 hover:border-yellowBrand/50"
+                  : "bg-lightBg/30 border-lightText/10 hover:bg-lightSecondary/20 hover:border-yellowBrand/50"
+              } ${
+                activeId === rec.id
+                  ? "ring-2 ring-yellowBrand/60 " +
+                    (theme === "dark"
+                      ? "bg-white/10 border-yellowBrand/50"
+                      : "bg-lightSecondary/20 border-yellowBrand/50")
+                  : ""
+              }`}
+            >
+              <img
+                src={rec.avatar}
+                alt={rec.title}
+                className="object-cover border-2 rounded-full w-14 h-14 border-yellowBrand/50"
+              />
+              <div className="text-center min-h-[50px] flex flex-col justify-center">
+                <h4 className="text-sm font-semibold">{rec.title}</h4>
+                <p className={`text-xs transition-colors duration-500 ${
+                  theme === "dark" ? "text-gray-400" : "text-lightText/60"
+                }`}>
+                  {rec.subtitle}
+                </p>
+              </div>
+            </motion.button>
+          ))}
+        </div>
 
-                <span className="text-sm text-lightText/70">
-                  {activeId === rec.id ? "Playing" : ""}
-                </span>
-              </motion.div>
-            ))}
+        {/* Player Section */}
+        <motion.div
+          key={activeRecording.id}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`rounded-2xl p-6 md:p-8 backdrop-blur-xl border ${
+            theme === "dark"
+              ? "bg-black/40 border-white/10"
+              : "bg-white/40 border-lightText/10"
+          }`}
+        >
+          <audio
+            ref={audioRef}
+            src={activeRecording.src}
+            preload="metadata"
+          />
+
+          {/* Player Header */}
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-4">
+              <img
+                src={activeRecording.avatar}
+                alt={activeRecording.title}
+                className="object-cover w-16 h-16 border-2 rounded-full md:w-20 md:h-20 border-yellowBrand/50"
+              />
+              <div>
+                <h3 className="text-xl font-bold md:text-2xl">{activeRecording.title}</h3>
+                <p className={`mt-1 text-sm transition-colors duration-500 ${
+                  theme === "dark" ? "text-gray-400" : "text-lightText/60"
+                }`}>
+                  {activeRecording.subtitle}
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={togglePlay}
+              className="relative flex items-center justify-center w-16 h-16 text-black transition-transform rounded-full shadow-xl bg-yellowBrand hover:scale-110"
+            >
+              {playing ? <Pause size={28} /> : <Play size={28} />}
+              {playing && (
+                <motion.span
+                  className="absolute inset-0 border-2 rounded-full border-yellowBrand"
+                  animate={{ scale: [1, 1.4], opacity: [0.6, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                />
+              )}
+            </button>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`col-span-1 rounded-2xl p-6 backdrop-blur-xl border ${
-              theme === "dark"
-                ? "bg-black/40 border-white/10"
-                : "bg-white/40 border-lightText/10"
-            }`}
-          >
-            <audio
-              ref={audioRef}
-              src={activeRecording.src}
-              preload="metadata"
-            />
-
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <img
-                  src={activeRecording.avatar}
-                  alt={activeRecording.title}
-                  className="w-16 h-16 rounded-full object-cover border-2 border-yellowBrand/50"
-                />
-                <div>
-                  <h3 className="text-xl font-bold">{activeRecording.title}</h3>
-                  <p className="mt-1 text-lightText/70">
-                    {activeRecording.subtitle}
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={togglePlay}
-                className="relative flex items-center justify-center w-16 h-16 text-black rounded-full shadow-xl bg-yellowBrand"
-              >
-                {playing ? <Pause size={28} /> : <Play size={28} />}
-                {playing && (
-                  <motion.span
-                    className="absolute inset-0 border-2 rounded-full border-yellowBrand"
-                    animate={{ scale: [1, 1.4], opacity: [0.6, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                  />
-                )}
-              </button>
-            </div>
-
-            <div className="mt-6">
+          {/* Progress Bar */}
+          <div className="mt-8">
+            <div
+              ref={scrubRef}
+              onClick={handleScrub}
+              className="relative w-full h-2 rounded-full cursor-pointer bg-gray-400/20"
+            >
               <div
-                ref={scrubRef}
-                onClick={handleScrub}
-                className="relative w-full h-2 rounded-full cursor-pointer bg-gray-400/20"
-              >
-                <div
-                  style={{ width: `${progress}%` }}
-                  className="absolute inset-y-0 left-0 rounded-full bg-yellowBrand"
-                />
-              </div>
-              <div className="flex items-center justify-between mt-2 text-xs text-lightText/70">
-                <span>{currentTime}s / {activeRecording.duration}s</span>
-                <span>Click the bar to scrub</span>
-              </div>
+                style={{ width: `${progress}%` }}
+                className="absolute inset-y-0 left-0 rounded-full bg-yellowBrand"
+              />
             </div>
+            <div className="flex items-center justify-between mt-2 text-xs text-lightText/70">
+              <span>{currentTime}s / {activeRecording.duration}s</span>
+              <span>Click the bar to scrub</span>
+            </div>
+          </div>
 
-            <div className="mt-6 p-4 rounded-lg bg-black/10 dark:bg-white/5">
-              <p className="text-sm leading-relaxed">
-                {activeRecording.transcript.split(' ').map((word, index) => {
-                  const words = activeRecording.transcript.split(' ');
-                  const revealIndex = Math.floor((progress / 100) * words.length);
-                  return (
-                    <span
-                      key={index}
-                      className={`transition-opacity duration-300 ${
-                        index <= revealIndex ? 'opacity-100' : 'opacity-30'
-                      }`}
-                    >
-                      {word}{' '}
-                    </span>
-                  );
-                })}
-              </p>
-            </div>
-          </motion.div>
-        </div>
+          {/* Transcript */}
+          <div className={`p-4 md:p-6 mt-8 rounded-lg ${
+            theme === "dark" ? "bg-black/10" : "bg-white/10"
+          }`}>
+            <p className="text-sm leading-relaxed md:text-base">
+              {activeRecording.transcript.split(' ').map((word, index) => {
+                const words = activeRecording.transcript.split(' ');
+                const revealIndex = Math.floor((progress / 100) * words.length);
+                return (
+                  <span
+                    key={index}
+                    className={`transition-opacity duration-300 ${
+                      index <= revealIndex ? 'opacity-100' : 'opacity-30'
+                    }`}
+                  >
+                    {word}{' '}
+                  </span>
+                );
+              })}
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
