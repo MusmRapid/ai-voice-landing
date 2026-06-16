@@ -136,7 +136,8 @@ const recordings: Recording[] = [
 
 const VoiceRecordings: React.FC = () => {
   const [theme] = useAtom(themeAtom);
-  const [activeId, setActiveId] = useState<string>(recordings[0].id);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [showPlayer, setShowPlayer] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -145,7 +146,7 @@ const VoiceRecordings: React.FC = () => {
   const scrubRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
 
-  const activeRecording = recordings.find((r) => r.id === activeId)!;
+  const activeRecording = activeId ? recordings.find((r) => r.id === activeId) : null;
 
   const updateProgress = () => {
     const audio = audioRef.current;
@@ -251,142 +252,161 @@ const VoiceRecordings: React.FC = () => {
 
         {/* Voice Selection Grid */}
         <div className="grid gap-4 mb-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {recordings.map((rec, index) => (
-            <motion.button
-              key={rec.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
-              onClick={() => {
-                setActiveId(rec.id);
-                setPlaying(false);
-                setProgress(0);
-                setCurrentTime(0);
-              }}
-              className={`p-4 rounded-2xl border backdrop-blur-md transition-all duration-300 flex flex-col items-center gap-3 ${
-                theme === "dark"
-                  ? "bg-white/5 border-white/10 hover:bg-white/10 hover:border-yellowBrand/50"
-                  : "bg-lightBg/30 border-lightText/10 hover:bg-lightSecondary/20 hover:border-yellowBrand/50"
-              } ${
-                activeId === rec.id
-                  ? "ring-2 ring-yellowBrand/60 " +
-                    (theme === "dark"
-                      ? "bg-white/10 border-yellowBrand/50"
-                      : "bg-lightSecondary/20 border-yellowBrand/50")
-                  : ""
-              }`}
-            >
-              <img
-                src={rec.avatar}
-                alt={rec.title}
-                className="object-cover border-2 rounded-full w-14 h-14 border-yellowBrand/50"
-              />
-              <div className="text-center min-h-[50px] flex flex-col justify-center">
-                <h4 className="text-sm font-semibold">{rec.title}</h4>
-                <p className={`text-xs transition-colors duration-500 ${
-                  theme === "dark" ? "text-gray-400" : "text-lightText/60"
-                }`}>
-                  {rec.subtitle}
-                </p>
-              </div>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Player Section */}
-        <motion.div
-          key={activeRecording.id}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`rounded-2xl p-6 md:p-8 backdrop-blur-xl border ${
-            theme === "dark"
-              ? "bg-black/40 border-white/10"
-              : "bg-white/40 border-lightText/10"
-          }`}
-        >
-          <audio
-            ref={audioRef}
-            src={activeRecording.src}
-            preload="metadata"
-          />
-
-          {/* Player Header */}
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
-              <img
-                src={activeRecording.avatar}
-                alt={activeRecording.title}
-                className="object-cover w-16 h-16 border-2 rounded-full md:w-20 md:h-20 border-yellowBrand/50"
-              />
-              <div>
-                <h3 className="text-xl font-bold md:text-2xl">{activeRecording.title}</h3>
-                <p className={`mt-1 text-sm transition-colors duration-500 ${
-                  theme === "dark" ? "text-gray-400" : "text-lightText/60"
-                }`}>
-                  {activeRecording.subtitle}
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={togglePlay}
-              className="relative flex items-center justify-center w-16 h-16 text-black transition-transform rounded-full shadow-xl bg-yellowBrand hover:scale-110"
-            >
-              {playing ? <Pause size={28} /> : <Play size={28} />}
-              {playing && (
-                <motion.span
-                  className="absolute inset-0 border-2 rounded-full border-yellowBrand"
-                  animate={{ scale: [1, 1.4], opacity: [0.6, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
+          {recordings.reduce<React.ReactNode[]>((elements, rec, index) => {
+            const button = (
+              <motion.button
+                key={rec.id}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                onClick={() => {
+                  if (activeId === rec.id) {
+                    if (showPlayer) {
+                      audioRef.current?.pause();
+                      setPlaying(false);
+                      setShowPlayer(false);
+                      setProgress(0);
+                      setCurrentTime(0);
+                    } else {
+                      setShowPlayer(true);
+                    }
+                  } else {
+                    audioRef.current?.pause();
+                    setActiveId(rec.id);
+                    setShowPlayer(true);
+                    setPlaying(false);
+                    setProgress(0);
+                    setCurrentTime(0);
+                  }
+                }}
+                className={`p-4 rounded-2xl border backdrop-blur-md transition-all duration-300 flex flex-col items-center gap-3 ${
+                  theme === "dark"
+                    ? "bg-white/5 border-white/10 hover:bg-white/10 hover:border-yellowBrand/50"
+                    : "bg-lightBg/30 border-lightText/10 hover:bg-lightSecondary/20 hover:border-yellowBrand/50"
+                } ${
+                  activeId === rec.id
+                    ? "ring-2 ring-yellowBrand/60 " +
+                      (theme === "dark"
+                        ? "bg-white/10 border-yellowBrand/50"
+                        : "bg-lightSecondary/20 border-yellowBrand/50")
+                    : ""
+                }`}
+              >
+                <img
+                  src={rec.avatar}
+                  alt={rec.title}
+                  className="object-cover border-2 rounded-full w-14 h-14 border-yellowBrand/50"
                 />
-              )}
-            </button>
-          </div>
+                <div className="text-center min-h-[50px] flex flex-col justify-center">
+                  <h4 className="text-sm font-semibold">{rec.title}</h4>
+                  <p className={`text-xs transition-colors duration-500 ${
+                    theme === "dark" ? "text-gray-400" : "text-lightText/60"
+                  }`}>
+                    {rec.subtitle}
+                  </p>
+                </div>
+              </motion.button>
+            );
 
-          {/* Progress Bar */}
-          <div className="mt-8">
-            <div
-              ref={scrubRef}
-              onClick={handleScrub}
-              className="relative w-full h-2 rounded-full cursor-pointer bg-gray-400/20"
-            >
-              <div
-                style={{ width: `${progress}%` }}
-                className="absolute inset-y-0 left-0 rounded-full bg-yellowBrand"
-              />
-            </div>
-            <div className="flex items-center justify-between mt-2 text-xs text-lightText/70">
-              <span>{currentTime}s / {activeRecording.duration}s</span>
-              <span>Click the bar to scrub</span>
-            </div>
-          </div>
+            elements.push(button);
 
-          {/* Transcript */}
-          <div className={`p-4 md:p-6 mt-8 rounded-lg ${
-            theme === "dark" ? "bg-black/10" : "bg-white/10"
-          }`}>
-            <p className="text-sm leading-relaxed md:text-base">
-              {activeRecording.transcript.split(' ').map((word, index) => {
-                const words = activeRecording.transcript.split(' ');
-                const revealIndex = Math.floor((progress / 100) * words.length);
-                return (
-                  <span
-                    key={index}
-                    className={`transition-opacity duration-300 ${
-                      index <= revealIndex ? 'opacity-100' : 'opacity-30'
-                    }`}
-                  >
-                    {word}{' '}
-                  </span>
-                );
-              })}
-            </p>
-          </div>
-        </motion.div>
+            if (showPlayer && activeId === rec.id && activeRecording) {
+              elements.push(
+                <motion.div
+                  key={`${rec.id}-player`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className={`col-span-full rounded-2xl p-6 md:p-8 backdrop-blur-xl border ${
+                    theme === "dark"
+                      ? "bg-black/40 border-white/10"
+                      : "bg-white/40 border-lightText/10"
+                  }`}
+                >
+                  <audio ref={audioRef} src={activeRecording.src} preload="metadata" />
+
+                  {/* Player Header */}
+                  <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={activeRecording.avatar}
+                        alt={activeRecording.title}
+                        className="object-cover w-16 h-16 border-2 rounded-full md:w-20 md:h-20 border-yellowBrand/50"
+                      />
+                      <div>
+                        <h3 className="text-xl font-bold md:text-2xl">{activeRecording.title}</h3>
+                        <p className={`mt-1 text-sm transition-colors duration-500 ${
+                          theme === "dark" ? "text-gray-400" : "text-lightText/60"
+                        }`}>
+                          {activeRecording.subtitle}
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={togglePlay}
+                      className="relative flex items-center justify-center w-16 h-16 text-black transition-transform rounded-full shadow-xl bg-yellowBrand hover:scale-110"
+                    >
+                      {playing ? <Pause size={28} /> : <Play size={28} />}
+                      {playing && (
+                        <motion.span
+                          className="absolute inset-0 border-2 rounded-full border-yellowBrand"
+                          animate={{ scale: [1, 1.4], opacity: [0.6, 0] }}
+                          transition={{ repeat: Infinity, duration: 1.5 }}
+                        />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="mt-8">
+                    <div
+                      ref={scrubRef}
+                      onClick={handleScrub}
+                      className="relative w-full h-2 rounded-full cursor-pointer bg-gray-400/20"
+                    >
+                      <div
+                        style={{ width: `${progress}%` }}
+                        className="absolute inset-y-0 left-0 rounded-full bg-yellowBrand"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between mt-2 text-xs text-lightText/70">
+                      <span>{currentTime}s / {activeRecording.duration}s</span>
+                      <span>Click the bar to scrub</span>
+                    </div>
+                  </div>
+
+                  {/* Transcript */}
+                  <div className={`p-4 md:p-6 mt-8 rounded-lg ${
+                    theme === "dark" ? "bg-black/10" : "bg-white/10"
+                  }`}>
+                    <p className="text-sm leading-relaxed md:text-base">
+                      {activeRecording.transcript.split(' ').map((word, index) => {
+                        const words = activeRecording.transcript.split(' ');
+                        const revealIndex = Math.floor((progress / 100) * words.length);
+                        return (
+                          <span
+                            key={index}
+                            className={`transition-opacity duration-300 ${
+                              index <= revealIndex ? 'opacity-100' : 'opacity-30'
+                            }`}
+                          >
+                            {word}{' '}
+                          </span>
+                        );
+                      })}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            }
+
+            return elements;
+          }, [])}
+        </div>
       </div>
-    </section>
-  );
+    </section>  );
 };
 
 export default VoiceRecordings;
