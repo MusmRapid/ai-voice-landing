@@ -60,29 +60,29 @@ CCPA users have rights to know, delete, and opt-out. To exercise rights, contact
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <div className="min-h-screen px-6 py-16 transition-colors duration-500 md:px-12 bg-lightBg text-lightText">
+    <div className="min-h-screen px-6 py-16 transition-colors duration-500 text-lightText bg-lightBg dark:bg-heroLeft dark:text-white md:px-12">
       
       <div className="max-w-4xl mx-auto mb-8">
         <Link
           to="/"
-          className="inline-flex items-center text-sm font-medium text-heroLeft hover:text-yellowBrand md:text-base"
+          className="inline-flex items-center text-sm font-medium text-heroLeft hover:text-yellowBrand dark:text-white md:text-base"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Home
         </Link>
       </div>
 
-      <h1 className="mb-12 text-4xl font-bold text-center md:text-5xl text-heroLeft">
+      <h1 className="mb-12 text-4xl font-bold text-center text-heroLeft dark:text-white md:text-5xl">
         Privacy Policy
       </h1>
 
       <div className="max-w-4xl mx-auto space-y-12">
         {sections.map((section, idx) => (
           <div key={idx} className="space-y-4">
-            <h2 className="text-2xl font-semibold md:text-3xl text-lightText">
+            <h2 className="text-2xl font-semibold text-lightText dark:text-white md:text-3xl">
               {section.title}
             </h2>
-            <p className="text-base leading-relaxed whitespace-pre-line md:text-lg text-lightText/80">
+            <p className="text-base leading-relaxed whitespace-pre-line text-lightText/80 dark:text-white/80 md:text-lg">
               {section.content}
             </p>
           </div>
