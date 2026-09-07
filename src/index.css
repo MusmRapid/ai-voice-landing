@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,11 +9,176 @@ html {
 }
 
 body {
-  @apply min-h-screen transition-colors duration-500 font-lato;
+  @apply min-h-screen transition-colors duration-500;
+  background: #050505;
+  color: #f5f5f0;
+  font-family: 'Manrope', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  @apply font-inter;
+  font-family: 'Manrope', sans-serif;
+}
+
+.home-page {
+  --ink: #f5f5f0;
+  --muted: #9da19a;
+  --line: rgba(255, 255, 255, 0.13);
+  --signal: #d7ff48;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: #050505;
+  background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 72px 72px !important;
+}
+
+.home-page.light-mode {
+  --ink: #182018;
+  --muted: #5b625a;
+  --line: rgba(24, 32, 24, 0.15);
+  --signal: #789000;
+  color: var(--ink);
+  background-color: #f7f8f3;
+  background-image: linear-gradient(rgba(24,32,24,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(24,32,24,.06) 1px, transparent 1px);
+}
+
+.home-page section:not(.hero-shell) {
+  position: relative;
+  padding-top: 9rem;
+  padding-bottom: 9rem;
+  border-top: 1px solid var(--line);
+}
+
+.home-page section:not(.hero-shell) > div {
+  position: relative;
+  z-index: 1;
+}
+
+.home-page h2 {
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(2.4rem, 6vw, 5.4rem) !important;
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+
+.home-page h2 span, .home-page h3 span {
+  color: var(--signal);
+}
+
+.home-page section:not(.hero-shell) > div > p {
+  color: var(--muted) !important;
+}
+
+.home-page section:not(.hero-shell) [class*="rounded-2xl"] {
+  border-radius: 0 !important;
+  border-color: var(--line) !important;
+  background: rgba(255,255,255,.035) !important;
+  box-shadow: none !important;
+}
+
+.home-page section:not(.hero-shell) [class*="rounded-2xl"]:hover {
+  background: rgba(215,255,72,.06) !important;
+  border-color: rgba(215,255,72,.45) !important;
+}
+
+.feature-marquee {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
+}
+
+.feature-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  padding: .5rem 0;
+  will-change: transform;
+}
+
+.feature-marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 1.5rem;
+}
+
+.feature-marquee-card {
+  width: clamp(18rem, 28vw, 25rem);
+  min-height: 22rem;
+  padding: 2.25rem 2rem 2rem;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  clip-path: polygon(0 0, calc(100% - 2.75rem) 0, 100% 2.75rem, 100% 100%, 0 100%);
+}
+
+.dark-mode .feature-marquee-card {
+  background: rgba(255, 255, 255, .06) !important;
+}
+
+.light-mode .feature-marquee-card {
+  background: rgba(24, 32, 24, .055) !important;
+}
+
+.hero-shell {
+  background: radial-gradient(circle at 70% 45%, rgba(215,255,72,.08), transparent 28%), #050505;
+}
+
+.light-mode .hero-shell {
+  background: radial-gradient(circle at 70% 45%, rgba(120,144,0,.11), transparent 28%), #f7f8f3;
+}
+
+.hero-shell canvas {
+  position: absolute;
+  inset: 0;
+  opacity: .72;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.light-mode .hero-shell canvas {
+  mix-blend-mode: multiply;
+  opacity: .6;
+}
+
+.hero-content {
+  text-align: left;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 14px var(--signal);
+}
+
+.home-page .font-inter,
+.home-page .font-lato,
+.home-page button,
+.home-page a,
+.home-page .hero-kicker,
+.home-page .hero-readout {
+  font-family: 'DM Mono', monospace;
+}
+
+.home-page .text-yellowBrand {
+  color: var(--signal) !important;
+}
+
+.light-mode .hero-content .text-gray-300 {
+  color: var(--muted) !important;
+}
+
+@media (max-width: 640px) {
+  .home-page section:not(.hero-shell) {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  .hero-shell {
+    min-height: 780px;
+  }
 }
 
 label {

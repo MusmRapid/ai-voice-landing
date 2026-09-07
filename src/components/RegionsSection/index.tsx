@@ -15,76 +15,99 @@ const regions = [
 
 const RegionsSection: React.FC = () => {
   const [theme] = useAtom(themeAtom);
+  const isDark = theme === "dark";
 
   return (
     <section
       id="regions"
-      className={`transition-colors duration-500 py-24 ${
-        theme === "dark" ? "text-white" : "text-lightText"
+      className={`relative overflow-hidden transition-colors duration-500 ${
+        isDark ? "text-white" : "text-lightText"
       }`}
     >
-      <div className="px-6 mx-auto max-w-7xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className={`text-3xl font-bold text-center md:text-5xl transition-colors duration-500 ${
-            theme === "dark" ? "text-white" : "text-lightText"
-          }`}
-        >
-          Global <span className="text-yellowBrand">Coverage</span>
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          viewport={{ once: true }}
-          className={`max-w-3xl mx-auto mt-6 text-center md:text-lg transition-colors duration-500 ${
-            theme === "dark" ? "text-gray-300" : "text-lightText/80"
-          }`}
-        >
-          Powering high-performance voice operations across the world’s leading
-          call center regions.
-        </motion.p>
-
-        <div className="grid gap-10 mt-16 sm:grid-cols-2 md:grid-cols-3">
-          {regions.map((region, index) => (
+      <div className="px-6 mx-auto max-w-7xl md:px-12">
+        <div className="grid gap-16 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-24">
+          <div className="lg:sticky lg:top-32 lg:self-start">
             <motion.div
-              key={region.code}
-              initial={{ opacity: 0, y: 25, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08, type: "spring", stiffness: 120 }}
-              whileHover={{ y: -4, scale: 1.01 }}
-              className={`p-8 rounded-2xl border backdrop-blur-md shadow-lg transition ${
-                theme === "dark"
-                  ? "bg-white/5 border-white/10 hover:bg-white/10 hover:border-yellowBrand/50"
-                  : "bg-lightBg/30 border-lightText/10 hover:bg-lightSecondary/20 hover:border-yellowBrand/50"
-              } ${region.comingSoon ? "opacity-70" : ""}`}
+              initial={{ opacity: 0, x: -18 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.7 }}
+              className={`mb-8 flex items-center gap-3 font-mono text-[10px] font-medium uppercase tracking-[0.24em] ${
+                isDark ? "text-white/45" : "text-lightText/50"
+              }`}
             >
-              <div className="flex justify-center mb-6">
-                {(() => {
-                  const ResolvedFlag: any = (Flag as any)?.default ?? Flag;
-                  return <ResolvedFlag code={region.code} style={{ width: 60, height: 45 }} />;
-                })()}
-              </div>
-
-              <h3
-                className={`text-xl font-semibold text-center transition-colors duration-500 ${
-                  theme === "dark" ? "text-white" : "text-lightText"
-                }`}
-              >
-                {region.country}
-              </h3>
-
-              {/* {region.comingSoon && (
-                <p className="mt-2 font-medium tracking-wide text-center text-yellowBrand">
-                  Coming Soon
-                </p>
-              )} */}
+              <span className="w-8 h-px bg-yellowBrand" />
+              03 / Global network
             </motion.div>
-          ))}
+
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="m-0 max-w-xl text-left text-5xl font-semibold leading-[0.95] tracking-[-0.055em] md:text-7xl"
+            >
+              One voice layer. Every time zone.
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.7, delay: 0.12 }}
+              className={`mt-8 max-w-md text-base leading-relaxed ${
+                isDark ? "text-white/55" : "text-lightText/65"
+              }`}
+            >
+              Local fluency, global consistency. Humalogue operates where your
+              customers are, without asking your team to follow the sun.
+            </motion.p>
+
+            <div className={`mt-12 border-l pl-5 font-mono text-[10px] uppercase tracking-[0.2em] ${
+              isDark ? "border-white/20 text-white/40" : "border-lightText/20 text-lightText/45"
+            }`}>
+              <p className="m-0">Coverage map / 03.06</p>
+              <p className="m-0 mt-2 text-yellowBrand">Signal: connected</p>
+            </div>
+          </div>
+
+          <div className="border-t border-current/15">
+            {regions.map((region, index) => {
+              const ResolvedFlag: any = (Flag as any)?.default ?? Flag;
+
+              return (
+                <motion.div
+                  key={region.code}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.35 }}
+                  transition={{ duration: 0.55, delay: index * 0.07 }}
+                  className={`group grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-5 border-b border-current/15 py-7 transition-colors md:grid-cols-[4rem_minmax(0,1fr)_8rem] md:gap-8 md:py-8 ${
+                    isDark ? "hover:bg-white/[0.025]" : "hover:bg-black/[0.025]"
+                  } ${region.comingSoon ? "opacity-55" : ""}`}
+                >
+                  <span className={`font-mono text-xs tracking-[0.2em] ${
+                    isDark ? "text-white/35" : "text-lightText/40"
+                  }`}>0{index + 1}</span>
+
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center justify-center w-12 h-8 overflow-hidden transition duration-300 grayscale group-hover:grayscale-0">
+                      <ResolvedFlag code={region.code} style={{ width: 42, height: 28, objectFit: "cover" }} />
+                    </span>
+                    <h3 className="m-0 text-xl font-medium tracking-[-0.03em] md:text-2xl">
+                      {region.country}
+                    </h3>
+                  </div>
+
+                  <span className={`text-right font-mono text-[10px] uppercase tracking-[0.16em] ${
+                    region.comingSoon ? "text-yellowBrand" : isDark ? "text-white/35" : "text-lightText/40"
+                  }`}>
+                    {region.comingSoon ? "Live node" : "Live node"}
+                  </span>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

@@ -17,7 +17,7 @@ function App() {
   const [theme] = useAtom(themeAtom);
 
   return (
-    <div className={`transition-colors duration-500 ${theme === 'dark' ? 'bg-heroLeft' : 'bg-lightBg'}`}>
+    <div className={`home-page ${theme === 'dark' ? 'dark-mode' : 'light-mode'} transition-colors duration-500`}>
       <Header />
       <HeroSection />
       {/* <VoiceRecordings /> */}
