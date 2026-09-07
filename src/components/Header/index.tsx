@@ -7,7 +7,7 @@ import {Sun , Moon} from "lucide-react";
 import logo from '/logo.png';
 
 const navItems = [
-  { name: "Recordings", to: "recordings" },
+  // { name: "Recordings", to: "recordings" },
   { name: "Why Choose Us", to: "whychooseus" },
   { name: "Features", to: "features" },
   { name: "Regions", to: "regions" },

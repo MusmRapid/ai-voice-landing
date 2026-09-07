@@ -72,7 +72,6 @@ const vertex = /* glsl */ `
     }
     
     gl_Position = projectionMatrix * mvPos;
-    gl_Position = projectionMatrix * mvPos;
   }
 `;
 
@@ -203,7 +202,7 @@ const Particles: React.FC<ParticlesProps> = ({
       lastTime = t;
       elapsed += delta * speed;
 
-      program.uniforms.uTime.value = elapsed * 0.001;
+      program.uniforms.uTime.value = elapsed * 0.004;
 
       if (moveParticlesOnHover) {
         particles.position.x = -mouseRef.current.x * particleHoverFactor;
@@ -214,9 +213,9 @@ const Particles: React.FC<ParticlesProps> = ({
       }
 
       if (!disableRotation) {
-        particles.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
-        particles.rotation.y = Math.cos(elapsed * 0.0005) * 0.15;
-        particles.rotation.z += 0.01 * speed;
+        particles.rotation.x = Math.sin(elapsed * 0.0012) * 0.18;
+        particles.rotation.y = Math.cos(elapsed * 0.001) * 0.24;
+        particles.rotation.z += 0.003 * speed;
       }
 
       renderer.render({ scene: particles, camera });
@@ -239,6 +238,7 @@ const Particles: React.FC<ParticlesProps> = ({
     particleCount,
     particleSpread,
     speed,
+    particleColors,
     moveParticlesOnHover,
     particleHoverFactor,
     alphaParticles,
