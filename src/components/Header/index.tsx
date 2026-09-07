@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { themeAtom } from "../../atom/themeAtom";
 import { useAtom } from "jotai/react";
-import {Sun , Moon} from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import logo from '/logo.png';
 
 const navItems = [
@@ -64,47 +64,44 @@ const Header: React.FC = () => {
 
   return (
     <motion.header
-     className={`fixed top-5 z-50 mx-auto inset-x-0 transition-all duration-500 rounded-2xl w-[95%] max-w-7xl
-        backdrop-blur-xl
-        ${
-          theme === "dark"
-            ? isScrolled
-              ? "bg-black/40 shadow-lg"
-              : "bg-black/20"
-            : isScrolled
-              ? "bg-white/80 shadow-lg"
-              : "bg-white/40"
-        }
-      `}
+     className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl transition-all duration-500 ${
+       theme === "dark"
+         ? isScrolled
+           ? "border-white/15 bg-black/80"
+           : "border-white/10 bg-black/35"
+         : isScrolled
+           ? "border-lightText/15 bg-lightBg/90"
+           : "border-lightText/10 bg-lightBg/60"
+     }`}
 
       initial={{ y: -20 }}
       animate={{ y: 0 }}
     >
-    <div className="flex items-center justify-between h-16 px-6">
+    <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-6 md:px-12">
       <div
         onClick={() => {
           scrollToSection("hero");
           setMenuOpen(false);
         }}
-        className={`text-2xl font-bold cursor-pointer select-none ${theme === 'dark' ? 'text-yellowBrand' : 'text-heroLeft'}`}
+        className="cursor-pointer select-none"
       >
-        <img src={logo} alt="Logo" className="w-32 h-auto"/>
+        <img src={logo} alt="Humalogue" className="h-auto w-28"/>
       </div>
 
-      <div className="items-center hidden space-x-6 md:flex">
-        <nav className="flex space-x-8 font-inter">
+      <div className="items-center hidden gap-8 md:flex">
+        <nav className="flex items-center gap-7 font-mono text-[11px] uppercase tracking-[0.12em]">
           {navItems.map((item) => (
             <button
               key={item.to}
               onClick={() => scrollToSection(item.to)}
               className={`
-                transition-colors cursor-pointer
+                cursor-pointer transition-colors
                 ${
                   activeSection === item.to
                     ? "text-yellowBrand"
                     : theme === "dark"
-                      ? "text-white hover:text-yellowBrand"
-                      : "text-lightText hover:text-yellowBrand"
+                      ? "text-white/65 hover:text-yellowBrand"
+                      : "text-lightText/65 hover:text-yellowBrand"
                 }
               `}
             >
@@ -115,8 +112,8 @@ const Header: React.FC = () => {
 
         <button
           onClick={toggleTheme}
-          className={`
-            transition-colors
+          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          className={`border-l pl-6 transition-colors
             ${theme === 'dark' ? 'text-white hover:text-yellowBrand' : 'text-lightText hover:text-yellowBrand'}
           `}
         >
@@ -124,10 +121,11 @@ const Header: React.FC = () => {
         </button>
       </div>
 
-      <div className="flex items-center space-x-4 md:hidden">
+      <div className="flex items-center gap-5 md:hidden">
         <button
           onClick={toggleTheme}
-          className={`transition-colors 
+          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          className={`transition-colors
             ${theme === "dark" ? "text-white" : "text-lightText"} 
             hover:text-yellowBrand`}
         >
@@ -136,7 +134,8 @@ const Header: React.FC = () => {
 
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className={`transition-colors 
+          aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+          className={`transition-colors
             ${theme === "dark" ? "text-white" : "text-lightText"} 
             hover:text-yellowBrand`}
         >
@@ -148,8 +147,8 @@ const Header: React.FC = () => {
 
     {menuOpen && (
       <div className={`
-        flex flex-col px-6 py-4 mt-2 space-y-4 rounded-xl backdrop-blur-md
-        ${theme === 'dark' ? 'bg-black/70 text-white' : 'bg-lightBg/90 text-lightText'}
+        flex flex-col gap-5 border-t px-6 py-5 font-mono text-xs uppercase tracking-[0.14em]
+        ${theme === 'dark' ? 'border-white/10 bg-black/95 text-white' : 'border-lightText/10 bg-lightBg/95 text-lightText'}
       `}>
         {navItems.map((item) => (
           <button
