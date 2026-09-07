@@ -38,7 +38,7 @@ const HeroSection: React.FC = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-5xl text-2xl font-semibold leading-[0.96] tracking-[-0.045em] md:text-8xl lg:text-[7.2rem]"
         >
-          Conversations that move at the speed of your operation.
+          High-Volume Call Center Operations. Fully Run on AI
         </motion.h1>
 
         <motion.p
@@ -49,8 +49,8 @@ const HeroSection: React.FC = () => {
             theme === 'dark' ? 'text-gray-300' : 'text-lightText/80'
           }`}
         >
-          Humalogue gives global call centers an always-on voice layer: natural,
-          intelligent agents built for volume, nuance, and measurable outcomes.
+          Built to handle 1,000 or 100,000 calls without missing a beat.
+          Same infrastructure, zero recruiting, zero ceiling.
         </motion.p>
 
       <motion.div
