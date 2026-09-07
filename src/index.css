@@ -82,6 +82,45 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(215,255,72,.45) !important;
 }
 
+.feature-marquee {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
+}
+
+.feature-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  padding: .5rem 0;
+  will-change: transform;
+}
+
+.feature-marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 1.5rem;
+}
+
+.feature-marquee-card {
+  width: clamp(18rem, 28vw, 25rem);
+  min-height: 22rem;
+  padding: 2.25rem 2rem 2rem;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  clip-path: polygon(0 0, calc(100% - 2.75rem) 0, 100% 2.75rem, 100% 100%, 0 100%);
+}
+
+.dark-mode .feature-marquee-card {
+  background: rgba(255, 255, 255, .06) !important;
+}
+
+.light-mode .feature-marquee-card {
+  background: rgba(24, 32, 24, .055) !important;
+}
+
 .hero-shell {
   background: radial-gradient(circle at 70% 45%, rgba(215,255,72,.08), transparent 28%), #050505;
 }

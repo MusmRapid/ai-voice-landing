@@ -50,6 +50,43 @@ const features = [
   },
 ];
 
+const FeatureCard: React.FC<{
+  feature: (typeof features)[number];
+  theme: "light" | "dark";
+}> = ({ feature, theme }) => {
+  const Icon = feature.icon;
+
+  return (
+    <article
+      className={`feature-marquee-card group border transition ${
+        theme === "dark"
+          ? "border-white/10 bg-white/5 hover:border-yellowBrand/50 hover:bg-white/10"
+          : "border-lightText/10 bg-lightBg/30 hover:border-yellowBrand/50 hover:bg-lightSecondary/20"
+      }`}
+    >
+      <div className="mb-8 flex h-14 w-14 items-center justify-center border border-yellowBrand/30 bg-yellowBrand/20 transition group-hover:bg-yellowBrand/30">
+        <Icon className="h-8 w-8 text-yellowBrand" />
+      </div>
+
+      <h3
+        className={`mb-4 text-xl font-semibold transition-colors duration-500 md:text-2xl ${
+          theme === "dark" ? "text-white" : "text-lightText"
+        }`}
+      >
+        {feature.title}
+      </h3>
+
+      <p
+        className={`transition-colors duration-500 ${
+          theme === "dark" ? "text-gray-300" : "text-lightText/80"
+        }`}
+      >
+        {feature.description}
+      </p>
+    </article>
+  );
+};
+
 const FeaturesSection: React.FC = () => {
   const [theme] = useAtom(themeAtom);
 
@@ -85,51 +122,28 @@ const FeaturesSection: React.FC = () => {
           accuracy, scalability, and world-class customer experiences.
         </motion.p>
 
-        <div className="grid gap-10 mt-16 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className={`p-8 transition border shadow-lg rounded-2xl backdrop-blur-md group ${
-                  theme === "dark"
-                    ? "bg-white/5 border-white/10 hover:bg-white/10"
-                    : "bg-lightBg/30 border-lightText/10 hover:bg-lightSecondary/20"
-                }`}
-              >
-                <div
-                  className={`flex items-center justify-center mb-6 transition border w-14 h-14 rounded-xl ${
-                    theme === "dark"
-                      ? "bg-yellowBrand/20 border-yellowBrand/30 group-hover:bg-yellowBrand/30"
-                      : "bg-yellowBrand/20 border-yellowBrand/30 group-hover:bg-yellowBrand/30"
-                  }`}
-                >
-                  <Icon className="w-8 h-8 text-yellowBrand" />
-                </div>
-
-                <h3
-                  className={`mb-4 text-xl font-semibold md:text-2xl transition-colors duration-500 ${
-                    theme === "dark" ? "text-white" : "text-lightText"
-                  }`}
-                >
-                  {feature.title}
-                </h3>
-
-                <p
-                  className={`transition-colors duration-500 ${
-                    theme === "dark" ? "text-gray-300" : "text-lightText/80"
-                  }`}
-                >
-                  {feature.description}
-                </p>
-              </motion.div>
-            );
-          })}
+        <div className="feature-marquee mt-16" aria-label="Key features">
+          <motion.div
+            className="feature-marquee-track"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{
+              duration: 72,
+              ease: "linear",
+              repeat: Infinity,
+              repeatType: "loop",
+            }}
+          >
+            <div className="feature-marquee-group">
+              {features.map((feature) => (
+                <FeatureCard key={feature.title} feature={feature} theme={theme} />
+              ))}
+            </div>
+            <div className="feature-marquee-group" aria-hidden="true">
+              {features.map((feature) => (
+                <FeatureCard key={`duplicate-${feature.title}`} feature={feature} theme={theme} />
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
