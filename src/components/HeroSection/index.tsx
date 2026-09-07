@@ -61,7 +61,7 @@ const HeroSection: React.FC = () => {
       >
         <button
           onClick={() => setOpenModal(true)}
-          className="group inline-flex items-center gap-4 bg-yellowBrand px-6 py-4 text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:bg-white"
+          className="group inline-flex items-center gap-4 bg-yellowBrand px-6 py-4 text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:bg-yellowSmall"
         >
           Book a demo <ArrowDownRight className="transition-transform group-hover:translate-x-1 group-hover:translate-y-1" size={18} />
         </button>

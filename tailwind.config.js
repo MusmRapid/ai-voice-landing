@@ -9,6 +9,7 @@ export default {
     extend: {
       colors: {
         yellowBrand: '#FFBB23',
+        yellowSmall: '#FAC44B',
         greenBrand: '#80B28F',
         textMoss: '#364D05',
         heroBack: '#EFF4ED',
