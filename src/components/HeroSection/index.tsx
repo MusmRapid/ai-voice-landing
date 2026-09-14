@@ -36,7 +36,7 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-5xl text-2xl font-semibold leading-[0.96] tracking-[-0.045em] md:text-8xl lg:text-[7.2rem]"
+          className="max-w-5xl text-4xl font-semibold leading-[0.96] tracking-[-0.045em] md:text-8xl lg:text-[7.2rem]"
         >
           High-Volume Call Center Operations. Fully Run on AI
         </motion.h1>
