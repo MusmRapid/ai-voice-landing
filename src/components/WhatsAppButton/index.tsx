@@ -23,7 +23,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
       target="_blank"
       rel="noreferrer"
       aria-label={`${label} at ${phoneNumber}`}
-      className={`group inline-flex items-center gap-3 bg-[#25D366] px-6 py-4 text-sm font-bold uppercase tracking-[0.14em] text-[#062b16] transition hover:bg-[#5bea8b] ${className}`}
+      className={`inline-flex items-center gap-3 rounded-xl bg-[#25D366] px-6 py-4 text-sm font-bold uppercase tracking-[0.14em] text-[#062b16] transition-colors hover:bg-[#5bea8b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 ${className}`}
     >
       <FaWhatsapp size={21} aria-hidden="true" />
       <span>{label}</span>

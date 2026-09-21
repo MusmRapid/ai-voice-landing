@@ -20,9 +20,9 @@ const HeroSection: React.FC = () => {
         particleCount={260}
         particleColors={theme === 'dark' ? darkParticleColors : lightParticleColors}
         moveParticlesOnHover={true}
-        particleSpread={3.6}
+        particleSpread={3.2}
         particleBaseSize={110}
-        speed={theme === 'dark' ? 0.65 : 0.5}
+        speed={theme === 'dark' ? 0.1 : 0.08}
         alphaParticles={true}
       />
       <div
@@ -61,14 +61,11 @@ const HeroSection: React.FC = () => {
       >
         <button
           onClick={() => setOpenModal(true)}
-          className="group inline-flex items-center gap-4 bg-yellowBrand px-6 py-4 text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:bg-yellowSmall"
+          className="inline-flex items-center gap-4 rounded-xl bg-yellowBrand px-6 py-4 text-sm font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-yellow-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellowBrand focus-visible:ring-offset-2"
         >
-          Book a demo <ArrowDownRight className="transition-transform group-hover:translate-x-1 group-hover:translate-y-1" size={18} />
+          Book a demo <ArrowDownRight size={18} />
         </button>
         <WhatsAppButton />
-        <a href="#whychooseus" className={`inline-flex items-center gap-3 px-3 py-3 text-sm font-medium uppercase tracking-[0.14em] transition hover:text-yellowBrand ${theme === 'dark' ? 'text-white/70' : 'text-lightText/70'}`}>
-          Explore the system <ArrowDownRight size={16} />
-        </a>
       </motion.div>
 
       <div className={`hero-readout absolute bottom-8 left-6 right-6 flex max-w-7xl flex-col gap-5 border-t pt-4 text-[10px] uppercase tracking-[0.18em] md:left-12 md:right-12 md:flex-row md:items-center md:justify-between ${theme === 'dark' ? 'border-white/15 text-white/45' : 'border-black/15 text-lightText/55'}`}>
