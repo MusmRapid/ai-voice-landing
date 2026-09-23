@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, X } from "lucide-react";
 import { useAtom } from "jotai/react";
-import emailjs from "@emailjs/browser";
+// import emailjs from "@emailjs/browser";
 import { themeAtom } from "../../atom/themeAtom";
 
 interface PartnerInquiryModalProps {
@@ -13,8 +13,10 @@ interface PartnerInquiryModalProps {
 const PartnerInquiryModal: React.FC<PartnerInquiryModalProps> = ({ open, onClose }) => {
   const [theme] = useAtom(themeAtom);
   const formRef = useRef<HTMLFormElement>(null);
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
+  // const [loading, setLoading] = useState(false);
+  // const [status, setStatus] = useState<string | null>(null);
+  const [loading] = useState(false);
+  const [status] = useState<string | null>(null);
   const [partnerType, setPartnerType] = useState("");
   const [partnerTypeOpen, setPartnerTypeOpen] = useState(false);
 
