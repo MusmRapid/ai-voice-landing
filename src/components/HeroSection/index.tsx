@@ -57,13 +57,15 @@ const HeroSection: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col items-start gap-5 mt-10 sm:flex-row sm:items-center"
+        className="flex flex-row items-center gap-2 mt-10 sm:gap-5"
       >
         <button
           onClick={() => setOpenModal(true)}
-          className="inline-flex items-center gap-4 rounded-xl bg-yellowBrand px-6 py-4 text-sm font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-yellow-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellowBrand focus-visible:ring-offset-2"
+          className="inline-flex items-center gap-3 rounded-xl bg-yellowBrand px-4 py-3 text-xs font-bold uppercase tracking-[0.1em] text-black transition-colors hover:bg-yellow-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellowBrand focus-visible:ring-offset-2 sm:gap-4 sm:px-6 sm:py-4 sm:text-sm sm:tracking-[0.14em]"
         >
-          Book a demo <ArrowDownRight size={18} />
+          <span className="sm:hidden">Demo</span>
+          <span className="hidden sm:inline">Book a demo</span>
+          <ArrowDownRight className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
         </button>
         <WhatsAppButton />
       </motion.div>

@@ -1,13 +1,20 @@
 import React from "react";
 import { useAtom } from "jotai/react";
 import { themeAtom } from "../../atom/themeAtom";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "/logo.png";
 
 const Footer: React.FC = () => {
   const [theme] = useAtom(themeAtom);
+  const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
 
   const scrollToSection = (id: string) => {
+    if (pathname !== "/") {
+      navigate(`/#${id}`);
+      return;
+    }
+
     const el = document.getElementById(id);
     if (el) {
       window.scrollTo({
@@ -17,20 +24,30 @@ const Footer: React.FC = () => {
     }
   };
 
+  React.useEffect(() => {
+    if (pathname !== "/" || !hash) return;
+
+    const timer = window.setTimeout(() => {
+      document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+
+    return () => window.clearTimeout(timer);
+  }, [pathname, hash]);
+
   return (
     <footer
       className={`border-t py-12 transition-colors duration-500 ${
         theme === "dark" ? "border-white/10 bg-black/30 text-white" : "border-lightText/15 bg-lightBg/60 text-lightText"
       }`}
     >
-      <div className="mx-auto max-w-7xl px-6 md:px-12">
+      <div className="px-6 mx-auto max-w-7xl md:px-12">
         <div className="grid gap-12 md:grid-cols-[1fr_auto] md:items-start">
           <div>
             <div
-              onClick={() => scrollToSection("hero")}
+              onClick={() => navigate("/")}
               className="inline-block cursor-pointer"
             >
-              <img src={logo} alt="Humalogue" className="h-auto w-32" />
+              <img src={logo} alt="Humalogue" className="w-32 h-auto" />
             </div>
             <p className={`mt-5 max-w-xs text-sm leading-relaxed ${theme === "dark" ? "text-white/45" : "text-lightText/55"}`}>
               Autonomous voice infrastructure for teams that operate everywhere.
@@ -46,6 +63,7 @@ const Footer: React.FC = () => {
                 <button onClick={() => scrollToSection("hero")} className="transition hover:text-yellowBrand">Home</button>
                 <button onClick={() => scrollToSection("whychooseus")} className="transition hover:text-yellowBrand">Why us</button>
                 <button onClick={() => scrollToSection("features")} className="transition hover:text-yellowBrand">Features</button>
+                <button onClick={() => scrollToSection("partners")} className="transition hover:text-yellowBrand">Partners</button>
                 <button onClick={() => scrollToSection("contact")} className="transition hover:text-yellowBrand">Contact</button>
               </div>
             </div>

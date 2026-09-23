@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { themeAtom } from "../../atom/themeAtom";
 import { useAtom } from "jotai/react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Sun, Moon } from "lucide-react";
 import logo from '/logo.png';
 
@@ -13,24 +14,45 @@ const navItems = [
   { name: "Regions", to: "regions" },
   { name: "Advantages", to: "advantages" },
   { name: "Testimonials", to: "testimonials" },
+  { name: "Become Partner", to: "partners" },
   { name: "Contact", to: "contact" },
 ];
-
-const scrollToSection = (id: string) => {
-  const el = document.getElementById(id);
-  if (el) {
-    window.scrollTo({
-      top: el.offsetTop - 80, 
-      behavior: "smooth",
-    });
-  }
-};
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("hero");
   const [theme, setTheme] = useAtom(themeAtom);
+  const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
+
+  const scrollToSection = (id: string) => {
+    if (pathname !== "/") {
+      navigate(`/#${id}`);
+      setMenuOpen(false);
+      return;
+    }
+
+    const el = document.getElementById(id);
+    if (el) {
+      window.scrollTo({
+        top: el.offsetTop - 80,
+        behavior: "smooth",
+      });
+    }
+    setMenuOpen(false);
+  };
+
+  useEffect(() => {
+    if (pathname !== "/" || !hash) return;
+
+    const id = hash.slice(1);
+    const timer = window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+
+    return () => window.clearTimeout(timer);
+  }, [pathname, hash]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -80,8 +102,7 @@ const Header: React.FC = () => {
     <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-6 md:px-12">
       <div
         onClick={() => {
-          scrollToSection("hero");
-          setMenuOpen(false);
+            navigate("/");
         }}
         className="cursor-pointer select-none"
       >
