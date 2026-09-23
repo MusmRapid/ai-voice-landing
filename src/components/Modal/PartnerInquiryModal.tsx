@@ -21,7 +21,7 @@ const PartnerInquiryModal: React.FC<PartnerInquiryModalProps> = ({ open, onClose
   if (!open) return null;
 
   const handleSubmit = (event: React.FormEvent) => {
-    // event.preventDefault();
+    event.preventDefault();
     // if (!formRef.current) return;
 
     // setLoading(true);
