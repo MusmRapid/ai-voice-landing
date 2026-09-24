@@ -110,7 +110,7 @@ const Header: React.FC = () => {
       </div>
 
       <div className="items-center hidden gap-8 md:flex">
-        <nav className="flex items-center gap-7 font-mono text-[11px] uppercase tracking-[0.12em]">
+        <nav className="flex items-center gap-6 font-mono text-[14px] uppercase ">
           {navItems.map((item) => (
             <button
               key={item.to}
@@ -121,7 +121,7 @@ const Header: React.FC = () => {
                   activeSection === item.to
                     ? "text-yellowBrand"
                     : theme === "dark"
-                      ? "text-white/65 hover:text-yellowBrand"
+                      ? "text-white/85 hover:text-yellowBrand"
                       : "text-lightText/65 hover:text-yellowBrand"
                 }
               `}

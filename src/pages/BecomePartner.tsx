@@ -27,9 +27,10 @@ const BecomePartner: React.FC = () => {
                 <span className="w-8 h-px bg-yellowBrand" />
                 Partner program / 01
               </div>
-              <h1 className="m-0 max-w-5xl text-6xl font-semibold leading-[0.88] tracking-[-0.065em] md:text-8xl lg:text-[8.5rem]">
-                Bring the client.<br />
-                <span className="text-yellowBrand">Share the upside.</span>
+              <h1 className="m-0 max-w-5xl text-6xl font-semibold leading-[0.88] tracking-[-0.065em] md:text-8xl lg:text-[7.25rem]">
+                <span className="">Your network.</span><br/>
+                <span className="text-yellowBrand">Our AI.</span><br/>
+                <span className="text-yellowBrand">More calls, automated.</span>
               </h1>
             </motion.div>
 
@@ -59,7 +60,7 @@ const BecomePartner: React.FC = () => {
                 </div>
               </div>
               <p className={`m-0 text-2xl font-medium leading-tight tracking-[-0.04em] md:text-3xl ${isDark ? "text-white" : "text-lightText"}`}>
-                You open the door. We run the voice infrastructure. You share the upside.
+                Bring Homologue to the call centers and businesses you already serve
               </p>
               <div className={`mt-10 grid grid-cols-3 gap-px border-y ${isDark ? "border-white/15 bg-white/15" : "border-lightText/15 bg-lightText/15"}`}>
                 {["INTRODUCE", "DEPLOY", "PARTICIPATE"].map((label, index) => (
