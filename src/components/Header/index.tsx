@@ -14,7 +14,7 @@ const navItems = [
   { name: "Regions", to: "regions" },
   { name: "Advantages", to: "advantages" },
   { name: "Testimonials", to: "testimonials" },
-  { name: "Become Partner", to: "partners" },
+  { name: "Partner With Us", to: "partners" },
   { name: "Contact", to: "contact" },
 ];
 
