@@ -3,7 +3,7 @@ import type { RouteObject } from "react-router-dom";
 import MainLayout from "./Layout/MainLayout";
 
 const Home = lazy(() => import("./pages/Home"));
-const BecomePartner = lazy(() => import("./pages/BecomePartner"));
+// const BecomePartner = lazy(() => import("./pages/BecomePartner"));
 
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
@@ -21,16 +21,16 @@ const ResponsibleAIPolicy = lazy(() => import("./pages/ResponsibleAIPolicy"));
             }
         ]
     },
-    {
-        path: "/partnerprogram",
-        element: (<MainLayout />),
-        children: [
-            {
-                index: true,
-                element: <BecomePartner />,
-            }
-        ]
-    },
+    // {
+    //     path: "/partnerprogram",
+    //     element: (<MainLayout />),
+    //     children: [
+    //         {
+    //             index: true,
+    //             element: <BecomePartner />,
+    //         }
+    //     ]
+    // },
 
     { path: "/terms-of-service", element: <TermsOfService/> },
     { path: "/privacy-policy", element: <PrivacyPolicy/> },

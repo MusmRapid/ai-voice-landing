@@ -1,10 +1,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Network, Sparkles, UsersRound } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Network, Sparkles } from "lucide-react";
 import { useAtom } from "jotai/react";
 import { themeAtom } from "../../atom/themeAtom";
+import PartnerForm from "../PartnerForm";
 
 const PartnerSection: React.FC = () => {
   const [theme] = useAtom(themeAtom);
@@ -31,9 +31,15 @@ const PartnerSection: React.FC = () => {
               <span className="w-8 h-px bg-yellowBrand" />
               06 / Partner protocol
             </div>
-            <h2 className="m-0 max-w-xl text-left text-5xl font-semibold leading-[0.94] tracking-[-0.055em] md:text-7xl">
+            <h2 className="m-0 max-w-xl text-left text-4xl font-semibold leading-[0.96] tracking-[-0.05em] md:text-6xl">
               Turn your network into an advantage.
             </h2>
+            <p className={`mt-7 max-w-lg text-base leading-relaxed md:text-lg ${
+              isDark ? "text-white/60" : "text-lightText/65"
+            }`}>
+              Bring your clients, expertise, or distribution network into an
+              infrastructure built for serious scale.
+            </p>
           </motion.div>
 
           <motion.div
@@ -48,41 +54,15 @@ const PartnerSection: React.FC = () => {
             }`}
           >
             <div className="absolute right-0 top-0 h-10 w-10 bg-yellowBrand [clip-path:polygon(0_0,100%_0,100%_100%)]" />
-            <div className="flex items-center justify-between mb-12">
-              <div className="flex items-center justify-center border h-11 w-11 border-yellowBrand/40 text-yellowBrand">
-                <UsersRound size={20} strokeWidth={1.5} />
+            <div className="flex items-center justify-between pb-5 mb-8 border-b border-current/15">
+              <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-yellowBrand">
+                <Network size={16} /> Partner network / intake
               </div>
-              <span className={`font-mono text-[10px] uppercase tracking-[0.2em] ${
-                isDark ? "text-white/35" : "text-lightText/40"
-              }`}>Partner / 01</span>
+              <span className={`font-mono text-[9px] uppercase tracking-[0.14em] ${isDark ? "text-white/35" : "text-lightText/40"}`}>
+                01—06
+              </span>
             </div>
-            <p className={`m-0 max-w-xl text-2xl font-medium leading-tight tracking-[-0.035em] md:text-3xl ${
-              isDark ? "text-white" : "text-lightText"
-            }`}>
-              Bring your clients, expertise, or distribution network into an
-              infrastructure built for serious scale.
-            </p>
-            <p className={`mt-5 max-w-lg text-sm leading-relaxed ${
-              isDark ? "text-white/60" : "text-lightText/65"
-            }`}>
-              Together, we make deployment simpler, reach wider, and create a
-              more capable voice operation for every market you serve.
-            </p>
-
-            <div className="flex flex-col items-start gap-5 mt-10 sm:flex-row sm:items-center">
-              <Link
-                to="/partnerprogram"
-                className="inline-flex items-center justify-center gap-4 rounded-xl bg-yellowBrand px-6 py-4 font-mono text-sm font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-yellow-300"
-              >
-                Become a partner <ArrowUpRight size={18} />
-              </Link>
-              <div className={`flex items-center gap-3 px-2 font-mono text-[10px] uppercase tracking-[0.16em] ${
-                isDark ? "text-white/40" : "text-lightText/45"
-              }`}>
-                <Network size={16} className="text-yellowBrand" />
-                Built for shared momentum
-              </div>
-            </div>
+            <PartnerForm />
           </motion.div>
         </div>
 
