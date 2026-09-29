@@ -36,7 +36,7 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-5xl text-4xl font-semibold leading-[0.96] tracking-[-0.045em] md:text-8xl lg:text-[7.2rem]"
+          className="max-w-5xl text-4xl font-semibold leading-[0.96] tracking-[-0.045em] sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-[7.2rem]"
         >
           High-Volume Call Center Operations. Fully Run on AI
         </motion.h1>
@@ -70,10 +70,10 @@ const HeroSection: React.FC = () => {
         <WhatsAppButton />
       </motion.div>
 
-      <div className={`hero-readout absolute bottom-8 left-6 right-6 flex max-w-7xl flex-col gap-5 border-t pt-4 text-[10px] uppercase tracking-[0.18em] md:left-12 md:right-12 md:flex-row md:items-center md:justify-between ${theme === 'dark' ? 'border-white/15 text-white/45' : 'border-black/15 text-lightText/55'}`}>
-        <span className="flex items-center gap-2"><Activity size={14} className="text-yellowBrand" /> System status: operational</span>
-        <span className="flex items-center gap-2"><Radio size={14} className="text-yellowBrand" /> 24 / 7 / everywhere</span>
-        <span>01. Philippines / 02. India / 03. Global</span>
+      <div className={`hero-readout absolute bottom-6 left-6 right-6 grid max-w-7xl grid-cols-1 gap-x-6 gap-y-3 border-t pt-4 text-[10px] uppercase tracking-[0.16em] sm:grid-cols-2 md:left-12 md:right-12 2xl:grid-cols-3 ${theme === 'dark' ? 'border-white/15 text-white/45' : 'border-black/15 text-lightText/55'}`}>
+        <span className="flex items-center gap-2"><Activity size={14} className="shrink-0 text-yellowBrand" /> System status: operational</span>
+        <span className="flex items-center gap-2"><Radio size={14} className="shrink-0 text-yellowBrand" /> 24 / 7 / everywhere</span>
+        <span className="sm:col-span-2 2xl:col-span-1">01. Philippines / 02. India / 03. Global</span>
       </div>
 
       </div>

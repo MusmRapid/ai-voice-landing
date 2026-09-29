@@ -13,7 +13,7 @@ const PartnerSection: React.FC = () => {
   return (
     <section
       id="partners"
-      className={`relative overflow-hidden border-t transition-colors duration-500 ${
+      className={`relative border-t transition-colors duration-500 ${
         isDark ? "border-white/10 text-white" : "border-lightText/15 text-lightText"
       }`}
     >
@@ -47,7 +47,7 @@ const PartnerSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className={`relative overflow-hidden border p-8 md:p-10 ${
+            className={`relative border p-8 md:p-10 ${
               isDark
                 ? "border-white/15 bg-white/[0.045]"
                 : "border-lightText/15 bg-black/[0.035]"

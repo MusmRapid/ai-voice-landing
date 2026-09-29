@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
 import { useAtom } from "jotai/react";
 import emailjs from "@emailjs/browser";
 import { themeAtom } from "../../atom/themeAtom";
@@ -17,6 +17,8 @@ const PartnerForm: React.FC = () => {
   const [theme] = useAtom(themeAtom);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
+  const [source, setSource] = useState("");
+  const [sourceOpen, setSourceOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const isDark = theme === "dark";
 
@@ -29,6 +31,12 @@ const PartnerForm: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!formRef.current) return;
+    if (!source) {
+      setStatus("Please choose how you heard about us.");
+      setSourceOpen(true);
+      document.getElementById("partner-source-trigger")?.focus();
+      return;
+    }
 
     setLoading(true);
     setStatus(null);
@@ -44,6 +52,7 @@ const PartnerForm: React.FC = () => {
         () => {
           setStatus("Thanks for reaching out. Our partner team will be in touch.");
           formRef.current?.reset();
+          setSource("");
           setLoading(false);
         },
         (error) => {
@@ -82,18 +91,62 @@ const PartnerForm: React.FC = () => {
         <label className="sr-only" htmlFor="partner-country">Country</label>
         <input id="partner-country" className={fieldClass} name="country" placeholder="Country *" autoComplete="country-name" required />
 
-        <label className="sr-only" htmlFor="partner-source">How did you hear about us?</label>
-        <select
-          id="partner-source"
-          className={fieldClass}
-          name="how_did_you_hear"
-          defaultValue=""
-          required
-          style={{ colorScheme: isDark ? "dark" : "light" }}
-        >
-          <option value="" disabled>How did you hear about us? *</option>
-          {hearAboutOptions.map((option) => <option key={option} value={option}>{option}</option>)}
-        </select>
+        <label className="sr-only" htmlFor="partner-source-trigger">How did you hear about us?</label>
+        <div className="relative">
+          <input type="hidden" name="how_did_you_hear" value={source} required />
+          <button
+            id="partner-source-trigger"
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded={sourceOpen}
+            aria-controls="partner-source-options"
+            onClick={() => setSourceOpen((open) => !open)}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") setSourceOpen(false);
+              if (event.key === "ArrowDown") {
+                event.preventDefault();
+                setSourceOpen(true);
+              }
+            }}
+            className={`${fieldClass} flex items-center justify-between gap-3 text-left ${source ? "" : "opacity-70"}`}
+          >
+            <span className="truncate">{source || "How did you hear about us? *"}</span>
+            <ChevronDown size={16} className={`shrink-0 transition-transform ${sourceOpen ? "rotate-180 text-yellowBrand" : "opacity-50"}`} />
+          </button>
+          {sourceOpen && (
+            <div
+              id="partner-source-options"
+              role="listbox"
+              aria-label="How did you hear about us?"
+              className={`absolute inset-x-0 top-full z-30 mt-1 border p-1 shadow-xl ${
+                isDark ? "border-white/15 bg-[#10120e]" : "border-lightText/15 bg-[#f7f8f3]"
+              }`}
+            >
+              {hearAboutOptions.map((option, index) => (
+                <button
+                  key={option}
+                  type="button"
+                  role="option"
+                  aria-selected={source === option}
+                  onClick={() => {
+                    setSource(option);
+                    setSourceOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between px-3 py-3 text-left font-mono text-[10px] uppercase tracking-[0.12em] transition-colors hover:bg-yellowBrand hover:text-black focus-visible:bg-yellowBrand focus-visible:text-black focus-visible:outline-none ${
+                    source === option
+                      ? "bg-yellowBrand/15 text-yellowBrand"
+                      : isDark
+                        ? "text-white/75"
+                        : "text-lightText/75"
+                  }`}
+                >
+                  <span className="flex items-center gap-3"><span className="text-[9px] opacity-45">0{index + 1}</span>{option}</span>
+                  {source === option && <Check size={14} />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         <button
           type="submit"
