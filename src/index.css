@@ -198,3 +198,12 @@ label {
 .animate-gradient-rotate {
   animation: gradient-rotate 6s linear infinite;
 }
+
+
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(to right bottom, #d946ef, #8b5cf6);
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 2px;
+}

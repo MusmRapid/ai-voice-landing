@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai/react";
 import { ChevronDown } from "lucide-react";
 import { themeAtom } from "../../atom/themeAtom";
 import emailjs from "@emailjs/browser";
+import { createPortal } from "react-dom";
 
 interface Props {
   open: boolean;
@@ -22,6 +23,14 @@ const campaignOptions = [
   "Home Services",
 ];
 
+interface CampaignDropdownPosition {
+  left: number;
+  width: number;
+  top?: number;
+  bottom?: number;
+  maxHeight: number;
+}
+
 const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
   const [theme] = useAtom(themeAtom);
   const formRef = useRef<HTMLFormElement>(null);
@@ -29,22 +38,53 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
   const [success, setSuccess] = useState<string | null>(null);
   const [selectedCampaign, setSelectedCampaign] = useState("");
   const [campaignOpen, setCampaignOpen] = useState(false);
-  const [campaignOpenUp, setCampaignOpenUp] = useState(false);
+  const [campaignDropdownPosition, setCampaignDropdownPosition] = useState<CampaignDropdownPosition | null>(null);
 
-  if (!open) return null;
+  const updateCampaignDropdownPosition = useCallback(() => {
+    const button = document.getElementById("campaign-select");
+    const rect = button?.getBoundingClientRect();
+    if (!rect) return;
+
+    const gap = 8;
+    const maxHeight = 144;
+    const spaceBelow = window.innerHeight - rect.bottom - gap;
+    const spaceAbove = rect.top - gap;
+    const openUp = spaceBelow < maxHeight && spaceAbove > spaceBelow;
+    const availableSpace = openUp ? spaceAbove : spaceBelow;
+
+    setCampaignDropdownPosition({
+      left: rect.left,
+      width: rect.width,
+      maxHeight: Math.max(0, Math.min(maxHeight, availableSpace)),
+      ...(openUp
+        ? { bottom: window.innerHeight - rect.top + gap }
+        : { top: rect.bottom + gap }),
+    });
+  }, []);
 
   const toggleCampaignDropdown = () => {
     const nextState = !campaignOpen;
     setCampaignOpen(nextState);
 
     if (nextState) {
-      const viewportHeight = window.innerHeight || 0;
-      const button = document.getElementById("campaign-select");
-      const rect = button?.getBoundingClientRect();
-      const spaceBelow = rect ? viewportHeight - rect.bottom : 0;
-      setCampaignOpenUp(spaceBelow < 220);
+      updateCampaignDropdownPosition();
     }
   };
+
+  useEffect(() => {
+    if (!open || !campaignOpen) return;
+
+    const updatePosition = () => updateCampaignDropdownPosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open, campaignOpen, updateCampaignDropdownPosition]);
+
+  if (!open) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -188,43 +228,43 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
                 />
               </button>
 
-              {campaignOpen && (
-                <div
-                  role="listbox"
-                  aria-label="Campaign options"
-                  className={`absolute inset-x-0 z-30 max-h-64 overflow-y-auto rounded-xl border shadow-2xl ${
-                    campaignOpenUp ? "bottom-full mb-2" : "top-full mt-2"
-                  } ${
-                    theme === "dark"
-                      ? "border-white/10 bg-[#1a1a1a] text-white"
-                      : "border-slate-200 bg-white text-slate-900"
-                  }`}
-                >
-                  {campaignOptions.map((campaign) => (
-                    <button
-                      key={campaign}
-                      type="button"
-                      role="option"
-                      aria-selected={selectedCampaign === campaign}
-                      onClick={() => {
-                        setSelectedCampaign(campaign);
-                        setCampaignOpen(false);
-                        setCampaignOpenUp(false);
-                      }}
-                      className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors ${
-                        selectedCampaign === campaign
-                          ? "bg-yellowBrand text-black"
-                          : theme === "dark"
-                            ? "text-white hover:bg-white/5"
-                            : "text-slate-700 hover:bg-slate-100"
-                      }`}
-                    >
-                      <span>{campaign}</span>
-                      {selectedCampaign === campaign && <span className="text-xs font-bold">✓</span>}
-                    </button>
-                  ))}
-                </div>
-              )}
+              {campaignOpen && campaignDropdownPosition &&
+                createPortal(
+                  <div
+                    role="listbox"
+                    aria-label="Campaign options"
+                    className={`fixed z-[1001] overflow-y-auto rounded-xl border shadow-2xl ${
+                      theme === "dark"
+                        ? "border-white/10 bg-[#1a1a1a] text-white"
+                        : "border-slate-200 bg-white text-slate-900"
+                    }`}
+                    style={campaignDropdownPosition}
+                  >
+                    {campaignOptions.map((campaign) => (
+                      <button
+                        key={campaign}
+                        type="button"
+                        role="option"
+                        aria-selected={selectedCampaign === campaign}
+                        onClick={() => {
+                          setSelectedCampaign(campaign);
+                          setCampaignOpen(false);
+                        }}
+                        className={`flex h-12 w-full shrink-0 items-center justify-between px-4 text-left text-sm transition-colors ${
+                          selectedCampaign === campaign
+                            ? "bg-yellowBrand text-black"
+                            : theme === "dark"
+                              ? "text-white hover:bg-white/5"
+                              : "text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        <span>{campaign}</span>
+                        {selectedCampaign === campaign && <span className="text-xs font-bold">✓</span>}
+                      </button>
+                    ))}
+                  </div>,
+                  document.body
+                )}
             </div>
           </div>
 
