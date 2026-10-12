@@ -201,7 +201,7 @@ label {
 
 
 ::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(to right bottom, #d946ef, #8b5cf6);
+  background-image: linear-gradient(to right bottom, #FDE047, #FFBB1F);
 }
 ::-webkit-scrollbar {
   width: 8px;

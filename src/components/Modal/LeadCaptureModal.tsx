@@ -84,6 +84,35 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
     };
   }, [open, campaignOpen, updateCampaignDropdownPosition]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const scrollY = window.scrollY;
+    const bodyStyles = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+    };
+    const htmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      Object.assign(document.body.style, bodyStyles);
+      document.documentElement.style.overflow = htmlOverflow;
+      window.scrollTo(0, scrollY);
+    };
+  }, [open]);
+
   if (!open) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -139,7 +168,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.6 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 cursor-pointer bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 cursor-pointer bg-black/60 backdrop-blur-md"
       />
 
       <motion.div
@@ -150,7 +179,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
           theme === "dark" ? "border-white/10 bg-[#121212] text-white" : "border-slate-200 bg-white text-slate-900"
         }`}
       >
-        <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="flex items-start justify-between gap-4 mb-6">
           <div>
             <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.18em] text-yellowBrand">Book a demo</p>
             <h3 className="text-3xl font-bold tracking-[-0.05em] text-marope">Let’s talk about your AI voice goals</h3>
@@ -158,7 +187,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
           <button
             type="button"
             onClick={onClose}
-            className="flex h-10 w-10 items-center justify-center rounded-full text-xl text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-700 dark:hover:bg-white/10 dark:hover:text-white"
+            className="flex items-center justify-center w-10 h-10 text-xl transition-colors rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-700 dark:hover:bg-white/10 dark:hover:text-white"
             aria-label="Close modal"
           >
             ✕
