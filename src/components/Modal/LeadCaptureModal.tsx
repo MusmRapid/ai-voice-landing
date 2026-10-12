@@ -29,8 +29,22 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
   const [success, setSuccess] = useState<string | null>(null);
   const [selectedCampaign, setSelectedCampaign] = useState("");
   const [campaignOpen, setCampaignOpen] = useState(false);
+  const [campaignOpenUp, setCampaignOpenUp] = useState(false);
 
   if (!open) return null;
+
+  const toggleCampaignDropdown = () => {
+    const nextState = !campaignOpen;
+    setCampaignOpen(nextState);
+
+    if (nextState) {
+      const viewportHeight = window.innerHeight || 0;
+      const button = document.getElementById("campaign-select");
+      const rect = button?.getBoundingClientRect();
+      const spaceBelow = rect ? viewportHeight - rect.bottom : 0;
+      setCampaignOpenUp(spaceBelow < 220);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +89,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
   }`;
 
   const selectButtonClass = `${inputClass} flex items-center justify-between gap-3 pr-11 text-left ${
-    selectedCampaign ? "text-current" : "text-slate-500"
+    selectedCampaign ? "text-current" : theme === "dark" ? "text-slate-300" : "text-slate-500"
   }`;
 
   return (
@@ -92,7 +106,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className={`relative z-[1000] w-full max-w-2xl overflow-visible rounded-[28px] border p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] transition-colors duration-500 md:p-8 ${
+        className={`relative z-[1000] w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-[28px] border p-4 shadow-[0_24px_80px_rgba(0,0,0,0.35)] transition-colors duration-500 sm:p-6 md:p-8 ${
           theme === "dark" ? "border-white/10 bg-[#121212] text-white" : "border-slate-200 bg-white text-slate-900"
         }`}
       >
@@ -164,7 +178,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
                 type="button"
                 aria-expanded={campaignOpen}
                 aria-haspopup="listbox"
-                onClick={() => setCampaignOpen((open) => !open)}
+                onClick={toggleCampaignDropdown}
                 className={selectButtonClass}
               >
                 <span className="truncate">{selectedCampaign || "Select a campaign"}</span>
@@ -178,7 +192,9 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
                 <div
                   role="listbox"
                   aria-label="Campaign options"
-                  className={`absolute inset-x-0 top-full z-30 mt-2 max-h-64 overflow-y-auto rounded-xl border shadow-2xl ${
+                  className={`absolute inset-x-0 z-30 max-h-64 overflow-y-auto rounded-xl border shadow-2xl ${
+                    campaignOpenUp ? "bottom-full mb-2" : "top-full mt-2"
+                  } ${
                     theme === "dark"
                       ? "border-white/10 bg-[#1a1a1a] text-white"
                       : "border-slate-200 bg-white text-slate-900"
@@ -193,6 +209,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
                       onClick={() => {
                         setSelectedCampaign(campaign);
                         setCampaignOpen(false);
+                        setCampaignOpenUp(false);
                       }}
                       className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors ${
                         selectedCampaign === campaign
