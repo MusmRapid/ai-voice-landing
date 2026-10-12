@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai/react";
+import { ChevronDown } from "lucide-react";
 import { themeAtom } from "../../atom/themeAtom";
 import emailjs from "@emailjs/browser";
 
@@ -9,17 +10,37 @@ interface Props {
   onClose: () => void;
 }
 
+const campaignOptions = [
+  "Medicare",
+  "Final Expense",
+  "ACA",
+  "MVA",
+  "Auto Fronter",
+  "Home Improvement",
+  "Real Estate",
+  "Truck Dispatch",
+  "Home Services",
+];
+
 const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
   const [theme] = useAtom(themeAtom);
   const formRef = useRef<HTMLFormElement>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
+  const [selectedCampaign, setSelectedCampaign] = useState("");
+  const [campaignOpen, setCampaignOpen] = useState(false);
 
   if (!open) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formRef.current) return;
+
+    const currentTime = new Date().toISOString();
+    const timeInput = formRef.current.querySelector<HTMLInputElement>('input[name="time"]');
+    if (timeInput) {
+      timeInput.value = currentTime;
+    }
 
     setLoading(true);
     setSuccess(null);
@@ -32,9 +53,11 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
         import.meta.env.VITE_EXPRESSJS_PUBLIC_KEY
       )
       .then(
-        (__) => {
+        () => {
           setSuccess("Thank you! Your demo request has been sent.");
           formRef.current?.reset();
+          setSelectedCampaign("");
+          setCampaignOpen(false);
           setLoading(false);
         },
         (error) => {
@@ -45,8 +68,18 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
       );
   };
 
+  const inputClass = `w-full rounded-xl border bg-transparent px-4 py-3 text-sm outline-none transition-all duration-200 placeholder:text-xs placeholder:uppercase placeholder:tracking-[0.12em] focus:border-yellowBrand focus:ring-2 focus:ring-yellowBrand/20 ${
+    theme === "dark"
+      ? "border-white/15 bg-white/5 text-white placeholder:text-white/40"
+      : "border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-500"
+  }`;
+
+  const selectButtonClass = `${inputClass} flex items-center justify-between gap-3 pr-11 text-left ${
+    selectedCampaign ? "text-current" : "text-slate-500"
+  }`;
+
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center">
+    <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
       <motion.div
         onClick={onClose}
         initial={{ opacity: 0 }}
@@ -59,76 +92,156 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className={`relative z-[1000] w-full max-w-lg p-8 rounded-2xl shadow-2xl transition-colors duration-500 ${
-          theme === "dark" ? "bg-neutral-900 text-white" : "bg-white text-lightText"
+        className={`relative z-[1000] w-full max-w-2xl overflow-visible rounded-[28px] border p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] transition-colors duration-500 md:p-8 ${
+          theme === "dark" ? "border-white/10 bg-[#121212] text-white" : "border-slate-200 bg-white text-slate-900"
         }`}
       >
-        <h3 className="mb-4 text-3xl font-bold text-marope">Book a Demo</h3>
-        <p className={`mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
-          Fill out the form and our AI deployment team will contact you.
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.18em] text-yellowBrand">Book a demo</p>
+            <h3 className="text-3xl font-bold tracking-[-0.05em] text-marope">Let’s talk about your AI voice goals</h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-10 w-10 items-center justify-center rounded-full text-xl text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-700 dark:hover:bg-white/10 dark:hover:text-white"
+            aria-label="Close modal"
+          >
+            ✕
+          </button>
+        </div>
+
+        <p className={`mb-6 text-sm ${theme === "dark" ? "text-gray-300" : "text-slate-600"}`}>
+          Share a few details and our team will reach out with the right solution for your business.
         </p>
 
-        <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            required
-            className="w-full p-3 bg-transparent border rounded-lg border-white/20 focus:outline-yellowBrand"
-          />
+        <form ref={formRef} onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <input type="hidden" name="time" value={new Date().toISOString()} />
+          <input type="hidden" name="campaign" value={selectedCampaign} />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            required
-            className="w-full p-3 bg-transparent border rounded-lg border-white/20 focus:outline-yellowBrand"
-          />
+          <div className="md:col-span-2">
+            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="company">
+              Company name
+            </label>
+            <input id="company" type="text" name="company" placeholder="Company name" required className={inputClass} />
+          </div>
 
-          <input
-            type="text"
-            name="company"
-            placeholder="Company Name"
-            className="w-full p-3 bg-transparent border rounded-lg border-white/20 focus:outline-yellowBrand"
-          />
+          <div>
+            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="name">
+              Person in charge
+            </label>
+            <input id="name" type="text" name="name" placeholder="Name" required className={inputClass} />
+          </div>
 
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Phone (optional)"
-            className="w-full p-3 bg-transparent border rounded-lg border-white/20 focus:outline-yellowBrand"
-          />
+          <div>
+            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="phone">
+              Phone number
+            </label>
+            <input id="phone" type="tel" name="phone" placeholder="Phone number" required className={inputClass} />
+          </div>
 
-          <textarea
-            name="message"
-            placeholder="Tell us about your needs..."
-            rows={4}
-            className="w-full p-3 bg-transparent border rounded-lg border-white/20 focus:outline-yellowBrand"
-          />
+          <div>
+            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="email">
+              Email
+            </label>
+            <input id="email" type="email" name="email" placeholder="Email" required className={inputClass} />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="msid">
+              Microsoft Teams ID
+            </label>
+            <input id="msid" type="text" name="msid" placeholder="Optional" className={inputClass} />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="campaign-select">
+              Campaign
+            </label>
+            <div className="relative">
+              <button
+                id="campaign-select"
+                type="button"
+                aria-expanded={campaignOpen}
+                aria-haspopup="listbox"
+                onClick={() => setCampaignOpen((open) => !open)}
+                className={selectButtonClass}
+              >
+                <span className="truncate">{selectedCampaign || "Select a campaign"}</span>
+                <ChevronDown
+                  size={16}
+                  className={`shrink-0 transition-transform ${campaignOpen ? "rotate-180 text-yellowBrand" : "text-slate-400"}`}
+                />
+              </button>
+
+              {campaignOpen && (
+                <div
+                  role="listbox"
+                  aria-label="Campaign options"
+                  className={`absolute inset-x-0 top-full z-30 mt-2 max-h-64 overflow-y-auto rounded-xl border shadow-2xl ${
+                    theme === "dark"
+                      ? "border-white/10 bg-[#1a1a1a] text-white"
+                      : "border-slate-200 bg-white text-slate-900"
+                  }`}
+                >
+                  {campaignOptions.map((campaign) => (
+                    <button
+                      key={campaign}
+                      type="button"
+                      role="option"
+                      aria-selected={selectedCampaign === campaign}
+                      onClick={() => {
+                        setSelectedCampaign(campaign);
+                        setCampaignOpen(false);
+                      }}
+                      className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors ${
+                        selectedCampaign === campaign
+                          ? "bg-yellowBrand text-black"
+                          : theme === "dark"
+                            ? "text-white hover:bg-white/5"
+                            : "text-slate-700 hover:bg-slate-100"
+                      }`}
+                    >
+                      <span>{campaign}</span>
+                      {selectedCampaign === campaign && <span className="text-xs font-bold">✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="totalBots">
+              Number of bots
+            </label>
+            <input
+              id="totalBots"
+              type="number"
+              name="totalBots"
+              min="1"
+              step="1"
+              placeholder="Enter a number"
+              className={`${inputClass} [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+            />
+          </div>
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 mt-2 font-bold rounded-lg bg-yellowBrand hover:bg-yellow-400 text-black ${
-              loading ? "opacity-70 cursor-not-allowed" : ""
+            className={`md:col-span-2 mt-2 w-full rounded-xl bg-yellowBrand px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-70 ${
+              loading ? "opacity-70" : ""
             }`}
           >
-            {loading ? "Sending..." : "Submit"}
+            {loading ? "Sending..." : "Request a demo"}
           </button>
         </form>
 
         {success && (
-          <p className={`mt-4 text-center ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>
+          <p className={`mt-4 text-center text-sm ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>
             {success}
           </p>
         )}
-
-        <button
-          onClick={onClose}
-          className="absolute text-xl top-3 right-5 opacity-70 hover:opacity-100"
-        >
-          ✕
-        </button>
       </motion.div>
     </div>
   );
