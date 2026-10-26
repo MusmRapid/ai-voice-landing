@@ -11,18 +11,6 @@ interface Props {
   onClose: () => void;
 }
 
-const campaignOptions = [
-  "Medicare",
-  "Final Expense",
-  "ACA",
-  "MVA",
-  "Auto Fronter",
-  "Home Improvement",
-  "Real Estate",
-  "Truck Dispatch",
-  "Home Services",
-];
-
 interface CampaignDropdownPosition {
   left: number;
   width: number;
@@ -200,7 +188,6 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
 
         <form ref={formRef} onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <input type="hidden" name="time" value={new Date().toISOString()} />
-          <input type="hidden" name="campaign" value={selectedCampaign} />
 
           <div className="md:col-span-2">
             <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="company">
@@ -241,60 +228,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
             <label className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-yellowBrand" htmlFor="campaign-select">
               Campaign
             </label>
-            <div className="relative">
-              <button
-                id="campaign-select"
-                type="button"
-                aria-expanded={campaignOpen}
-                aria-haspopup="listbox"
-                onClick={toggleCampaignDropdown}
-                className={selectButtonClass}
-              >
-                <span className="truncate">{selectedCampaign || "Select a campaign"}</span>
-                <ChevronDown
-                  size={16}
-                  className={`shrink-0 transition-transform ${campaignOpen ? "rotate-180 text-yellowBrand" : "text-slate-400"}`}
-                />
-              </button>
-
-              {campaignOpen && campaignDropdownPosition &&
-                createPortal(
-                  <div
-                    role="listbox"
-                    aria-label="Campaign options"
-                    className={`fixed z-[1001] overflow-y-auto rounded-xl border shadow-2xl ${
-                      theme === "dark"
-                        ? "border-white/10 bg-[#1a1a1a] text-white"
-                        : "border-slate-200 bg-white text-slate-900"
-                    }`}
-                    style={campaignDropdownPosition}
-                  >
-                    {campaignOptions.map((campaign) => (
-                      <button
-                        key={campaign}
-                        type="button"
-                        role="option"
-                        aria-selected={selectedCampaign === campaign}
-                        onClick={() => {
-                          setSelectedCampaign(campaign);
-                          setCampaignOpen(false);
-                        }}
-                        className={`flex h-12 w-full shrink-0 items-center justify-between px-4 text-left text-sm transition-colors ${
-                          selectedCampaign === campaign
-                            ? "bg-yellowBrand text-black"
-                            : theme === "dark"
-                              ? "text-white hover:bg-white/5"
-                              : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                      >
-                        <span>{campaign}</span>
-                        {selectedCampaign === campaign && <span className="text-xs font-bold">✓</span>}
-                      </button>
-                    ))}
-                  </div>,
-                  document.body
-                )}
-            </div>
+            <input id="campaign-select" type="text" name="campaign-select" placeholder="Medicare, Final Expense..." className={inputClass} />
           </div>
 
           <div className="md:col-span-2">

@@ -16,14 +16,18 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
   mobileLabel = "WhatsApp",
   className = "",
 }) => {
+  
   const normalizedNumber = phoneNumber.replace(/\D/g, "");
-  const whatsappUrl = `https://wa.me/${normalizedNumber}?text=${encodeURIComponent(message)}`;
+  
+  const whatsappUrl = `https://api.whatsapp.com/send?phone=${normalizedNumber}&text=${encodeURIComponent(
+    message
+  )}`;
 
   return (
     <a
       href={whatsappUrl}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       aria-label={`${label} at ${phoneNumber}`}
       className={`inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-xs font-bold uppercase tracking-[0.1em] text-[#062b16] transition-colors hover:bg-[#5bea8b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 sm:gap-3 sm:px-6 sm:py-4 sm:text-sm sm:tracking-[0.14em] ${className}`}
     >
