@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai/react";
-import { ChevronDown } from "lucide-react";
+// import { ChevronDown } from "lucide-react";
 import { themeAtom } from "../../atom/themeAtom";
 import emailjs from "@emailjs/browser";
-import { createPortal } from "react-dom";
+// import { createPortal } from "react-dom";
 
 interface Props {
   open: boolean;
@@ -24,10 +24,11 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-  const [selectedCampaign, setSelectedCampaign] = useState("");
+  const [, setSelectedCampaign] = useState("");
+  //selectedCampaign
   const [campaignOpen, setCampaignOpen] = useState(false);
-  const [campaignDropdownPosition, setCampaignDropdownPosition] = useState<CampaignDropdownPosition | null>(null);
-
+  const [,setCampaignDropdownPosition] = useState<CampaignDropdownPosition | null>(null);
+//campaignDropdownPosition
   const updateCampaignDropdownPosition = useCallback(() => {
     const button = document.getElementById("campaign-select");
     const rect = button?.getBoundingClientRect();
@@ -50,14 +51,14 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
     });
   }, []);
 
-  const toggleCampaignDropdown = () => {
-    const nextState = !campaignOpen;
-    setCampaignOpen(nextState);
+  // const toggleCampaignDropdown = () => {
+  //   const nextState = !campaignOpen;
+  //   setCampaignOpen(nextState);
 
-    if (nextState) {
-      updateCampaignDropdownPosition();
-    }
-  };
+  //   if (nextState) {
+  //     updateCampaignDropdownPosition();
+  //   }
+  // };
 
   useEffect(() => {
     if (!open || !campaignOpen) return;
@@ -145,9 +146,9 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
       : "border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-500"
   }`;
 
-  const selectButtonClass = `${inputClass} flex items-center justify-between gap-3 pr-11 text-left ${
-    selectedCampaign ? "text-current" : theme === "dark" ? "text-slate-300" : "text-slate-500"
-  }`;
+  // const selectButtonClass = `${inputClass} flex items-center justify-between gap-3 pr-11 text-left ${
+  //   selectedCampaign ? "text-current" : theme === "dark" ? "text-slate-300" : "text-slate-500"
+  // }`;
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
