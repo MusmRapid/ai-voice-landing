@@ -126,6 +126,7 @@ const LeadCaptureModal: React.FC<Props> = ({ open, onClose }) => {
       )
       .then(
         () => {
+          window.fbq?.("track", "Lead");
           setSuccess("Thank you! Your demo request has been sent.");
           formRef.current?.reset();
           setSelectedCampaign("");
